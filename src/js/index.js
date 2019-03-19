@@ -17,7 +17,9 @@ const controlSearch = async() => {
         state.search = new Search(query);
     }
     //3. Prepare UI for the results
-
+    searchView.clearInput();
+    searchView.clearResults();
+    
     //4. Search for the asteroids
     await state.search.getResults();
 
