@@ -7,17 +7,16 @@ async function getResults() {
     const items = data.near_earth_objects;
     console.log(items);
     Object.keys(items).map((item) => {
-      
-    items[item].forEach(e => {
-      const html = `<ul>
-<li>Astroid name: ${e.name}</li>
-<li>Date: ${item}</li>
+      let html = `<h2>Date: ${item}</h2><br/>`;
+
+      items[item].forEach(e => {
+        html += `<ul><li>Astroid name: ${e.name}</li>
 <li>Diameter: ${e.estimated_diameter.miles.estimated_diameter_max} miles</li>
 <li>Potentially Hazardous: ${e.is_potentially_hazardous_asteroid}</li>
 <li>Missed Earth by ${e.close_approach_data[0].miss_distance.miles} miles</li>
-</ul>`;      
-            console.log(html);
-    })       
+</ul><br/>`;
+      });
+        console.log(html);
 
     });
   }

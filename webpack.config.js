@@ -12,7 +12,7 @@ module.exports = {
     mode: 'development',
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
-        // writeToDisk: true
+        writeToDisk: true
     },
     // Added CSS & Style Loader
     module: {
