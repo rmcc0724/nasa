@@ -28,7 +28,7 @@ acc: 9 / acc + cur.length = 15 / newTitle = ['Pasta', 'with', 'tomato']
 acc: 15 / acc + cur.length = 18 / newTitle = ['Pasta', 'with', 'tomato']
 acc: 18 / acc + cur.length = 24 / newTitle = ['Pasta', 'with', 'tomato']
 */
-export const limitRecipeTitle = (title, limit = 17) => {
+export const limitAsteroidTitle = (title, limit = 17) => {
     const newTitle = [];
     if (title.length > limit) {
         title.split(' ').reduce((acc, cur) => {
@@ -44,25 +44,33 @@ export const limitRecipeTitle = (title, limit = 17) => {
     return title;
 }
 
-const renderRecipe = recipe => {
-    const markup = `
-        <li>
-            <a class="results__link" href="#${recipe.recipe_id}">
-                <figure class="results__fig">
-                    <img src="${recipe.image_url}" alt="${recipe.title}">
-                </figure>
-                <div class="results__data">
-                    <h4 class="results__name">${limitRecipeTitle(recipe.title)}</h4>
-                    <p class="results__author">${recipe.publisher}</p>
-                </div>
-            </a>
-        </li>
-    `;
-    elements.searchResList.insertAdjacentHTML('beforeend', markup);
-};
+const renderAsteroid = asteroids => {
+        Object.keys(asteroids).map((asteroid) => {
+                    let html = `<h2>Date: ${item}</h2><br/>`;
+                    // const headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
+                    // elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
+                    // console.log(asteroids[asteroid]);
 
-// type: 'prev' or 'next'
-const createButton = (page, type) => `
+                    // this.asteroids[asteroid].forEach(asteroid => {
+                    //     const bodyMarkup = `
+                    //     <li>
+                    //         <a class="results__link" href="#${asteroid.id}">
+                    //             <figure class="results__fig">
+                    //                 <img src="http://img.timeinc.net/time/daily/2011/1107/360_dawn_vesta_0715.jpg" alt="Asteroid">
+                    //             </figure>
+                    //             <div class="results__data">
+                    //                 <h4 class="results__name">Asteroid Name ${asteroid.name}</h4>
+                    //                 <p class="results__author">Hazardous? ${asteroid.is_potentially_hazardous_asteroid}</p>
+                    //             </div>
+                    //         </a>
+                    //     </li>
+                    // `;
+                    // elements.searchResList.insertAdjacentHTML('beforeend', bodyMarkup);
+                    });
+                };
+
+                // type: 'prev' or 'next'
+                const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
         <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
         <svg class="search__icon">
@@ -71,34 +79,41 @@ const createButton = (page, type) => `
     </button>
 `;
 
-const renderButtons = (page, numResults, resPerPage) => {
-    const pages = Math.ceil(numResults / resPerPage);
+                const renderButtons = (page, numResults, resPerPage) => {
+                    const pages = Math.ceil(numResults / resPerPage);
 
-    let button;
-    if (page === 1 && pages > 1) {
-        // Only button to go to next page
-        button = createButton(page, 'next');
-    } else if (page < pages) {
-        // Both buttons
-        button = `
+                    let button;
+                    if (page === 1 && pages > 1) {
+                        // Only button to go to next page
+                        button = createButton(page, 'next');
+                    }
+                    else if (page < pages) {
+                        // Both buttons
+                        button = `
             ${createButton(page, 'prev')}
             ${createButton(page, 'next')}
         `;
-    } else if (page === pages && pages > 1) {
-        // Only button to go to prev page
-        button = createButton(page, 'prev');
-    }
+                    }
+                    else if (page === pages && pages > 1) {
+                        // Only button to go to prev page
+                        button = createButton(page, 'prev');
+                    }
 
-    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
-};
+                    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+                };
 
-export const renderResults = (recipes, page = 1, resPerPage = 10) => {
-    // render results of currente page
-    const start = (page - 1) * resPerPage;
-    const end = page * resPerPage;
+                export const renderResults = (asteroids, page = 1, resPerPage = 10) => {
+                    // render results of currente page
+                    const start = (page - 1) * resPerPage;
+                    const end = page * resPerPage;
 
-    recipes.slice(start, end).forEach(renderRecipe);
+                    asteroids.slice(start, end).forEach(renderAsteroid());
 
-    // render pagination buttons
-    renderButtons(page, recipes.length, resPerPage);
-};
+                    // render pagination buttons
+                    renderButtons(page, asteroids.length, resPerPage);
+                };
+
+                export const getResults = asteroids => {
+                    // console.log(typeof(asteroids));
+                    renderAsteroid(asteroids);
+                };

@@ -1,5 +1,6 @@
 //Import the Search model from the Search.js file
 import Search from './models/Search';
+import * as searchView from './views/searchView';
 
 //Declare a new state variable
 const state = {};
@@ -8,7 +9,8 @@ const state = {};
 const controlSearch = async() => {
 
     //1. Get query from view
-    const query = '2019-03-18';
+    const query = searchView.getInput();
+    console.log(query);
 
     //2. Create a Search object and add to the state
     if (query) {
@@ -18,6 +20,9 @@ const controlSearch = async() => {
 
     //4. Search for the asteroids
     await state.search.getResults();
+
+    //5. Render results on the UI
+    searchView.getResults(state.search.result);
 };
 
 document.querySelector('.search').addEventListener('submit', e => {
