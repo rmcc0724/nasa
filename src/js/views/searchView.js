@@ -44,29 +44,22 @@ export const limitAsteroidTitle = (title, limit = 17) => {
     return title;
 }
 
-const renderAsteroid = asteroids => {
-        Object.keys(asteroids).map((asteroid) => {
-                    let html = `<h2>Date: ${item}</h2><br/>`;
-                    // const headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
-                    // elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
-                    // console.log(asteroids[asteroid]);
+const renderAsteroid = asteroid => {
 
-                    // this.asteroids[asteroid].forEach(asteroid => {
-                    //     const bodyMarkup = `
-                    //     <li>
-                    //         <a class="results__link" href="#${asteroid.id}">
-                    //             <figure class="results__fig">
-                    //                 <img src="http://img.timeinc.net/time/daily/2011/1107/360_dawn_vesta_0715.jpg" alt="Asteroid">
-                    //             </figure>
-                    //             <div class="results__data">
-                    //                 <h4 class="results__name">Asteroid Name ${asteroid.name}</h4>
-                    //                 <p class="results__author">Hazardous? ${asteroid.is_potentially_hazardous_asteroid}</p>
-                    //             </div>
-                    //         </a>
-                    //     </li>
-                    // `;
-                    // elements.searchResList.insertAdjacentHTML('beforeend', bodyMarkup);
-                    });
+                        const bodyMarkup = `
+                        <li>
+                            <a class="results__link" href="#${asteroid.id}">
+                                <figure class="results__fig">
+                                    <img src="http://img.timeinc.net/time/daily/2011/1107/360_dawn_vesta_0715.jpg" alt="Asteroid">
+                                </figure>
+                                <div class="results__data">
+                                    <h4 class="results__name">Asteroid Name ${asteroid.name}</h4>
+                                    <p class="results__author">Hazardous? ${asteroid.is_potentially_hazardous_asteroid}</p>
+                                </div>
+                            </a>
+                        </li>
+                    `;
+                    elements.searchResList.insertAdjacentHTML('beforeend', bodyMarkup);
                 };
 
                 // type: 'prev' or 'next'
@@ -114,6 +107,10 @@ const renderAsteroid = asteroids => {
                 };
 
                 export const getResults = asteroids => {
-                    // console.log(typeof(asteroids));
-                    renderAsteroid(asteroids);
+                    
+                    Object.keys(asteroids).map((asteroid) => {
+                    let headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
+                    elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
+                    asteroids[asteroid].forEach(renderAsteroid)
+                });
                 };
