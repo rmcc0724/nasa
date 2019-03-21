@@ -216,7 +216,7 @@ h2 {
 .loader svg {
   height: 5.5rem;
   width: 5.5rem;
-  fill: #F59A83;
+  fill: #033a92;
   transform-origin: 44% 50%;
   animation: rotate 1.5s infinite linear;
 }
@@ -390,7 +390,7 @@ h2 {
 .results__name,
 .likes__name {
   font-size: 1.3rem;
-  color: #F59A83;
+  color: #033a92;
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: .3rem;
