@@ -46,24 +46,24 @@ export const limitAsteroidTitle = (title, limit = 17) => {
 
 const renderAsteroid = asteroid => {
 
-                        const bodyMarkup = `
+    const bodyMarkup = `
                         <li>
                             <a class="results__link" href="#${asteroid.id}">
                                 <figure class="results__fig">
-                                    <img src="http://img.timeinc.net/time/daily/2011/1107/360_dawn_vesta_0715.jpg" alt="Asteroid">
+                                    <img src="dist/img/vesta_0715.jpg" alt="Asteroid">
                                 </figure>
                                 <div class="results__data">
-                                    <h4 class="results__name">Asteroid Name ${asteroid.name}</h4>
-                                    <p class="results__author">Hazardous? ${asteroid.is_potentially_hazardous_asteroid}</p>
+                                    <h4 class="results__name">Name: ${asteroid.name}</h4>
+                                    <p class="results__author">Hazardous?: ${asteroid.is_potentially_hazardous_asteroid}</p>
                                 </div>
                             </a>
                         </li>
                     `;
-                    elements.searchResList.insertAdjacentHTML('beforeend', bodyMarkup);
-                };
+    elements.searchResList.insertAdjacentHTML('beforeend', bodyMarkup);
+};
 
-                // type: 'prev' or 'next'
-                const createButton = (page, type) => `
+// type: 'prev' or 'next'
+const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
         <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
         <svg class="search__icon">
@@ -72,45 +72,40 @@ const renderAsteroid = asteroid => {
     </button>
 `;
 
-                const renderButtons = (page, numResults, resPerPage) => {
-                    const pages = Math.ceil(numResults / resPerPage);
+const renderButtons = (page, numResults, resPerPage) => {
+    const pages = Math.ceil(numResults / resPerPage);
 
-                    let button;
-                    if (page === 1 && pages > 1) {
-                        // Only button to go to next page
-                        button = createButton(page, 'next');
-                    }
-                    else if (page < pages) {
-                        // Both buttons
-                        button = `
+    let button;
+    if (page === 1 && pages > 1) {
+        // Only button to go to next page
+        button = createButton(page, 'next');
+    }
+    else if (page < pages) {
+        // Both buttons
+        button = `
             ${createButton(page, 'prev')}
             ${createButton(page, 'next')}
         `;
-                    }
-                    else if (page === pages && pages > 1) {
-                        // Only button to go to prev page
-                        button = createButton(page, 'prev');
-                    }
+    }
+    else if (page === pages && pages > 1) {
+        // Only button to go to prev page
+        button = createButton(page, 'prev');
+    }
 
-                    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
-                };
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+};
 
-                export const renderResults = (asteroids, page = 1, resPerPage = 10) => {
-                    // render results of currente page
-                    const start = (page - 1) * resPerPage;
-                    const end = page * resPerPage;
+export const renderResults = (asteroids, page = 1, resPerPage = 5) => {
+    // render results of current page
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage;
 
-                    asteroids.slice(start, end).forEach(renderAsteroid());
+    Object.keys(asteroids).map((asteroid) => {
+        let headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
+        elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
+        asteroids[asteroid].slice(start, end).forEach(renderAsteroid);
 
-                    // render pagination buttons
-                    renderButtons(page, asteroids.length, resPerPage);
-                };
-
-                export const getResults = asteroids => {
-                    
-                    Object.keys(asteroids).map((asteroid) => {
-                    let headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
-                    elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
-                    asteroids[asteroid].forEach(renderAsteroid)
-                });
-                };
+        // render pagination buttons
+        renderButtons(page, asteroids[asteroid].length, resPerPage);
+    });
+};

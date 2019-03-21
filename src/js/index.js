@@ -24,19 +24,36 @@ const controlSearch = async() => {
         searchView.clearResults();
 
 
-        //4. Search for the asteroids
-        await state.search.getResults();
+        try {
+            // 4) Search for recipes
+            await state.search.getResults();
 
-        //5. Render results on the UI
-        clearLoader();
-        searchView.getResults(state.search.result);
-    } else {
+            // 5) Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+        }
+        catch (err) {
+            alert('Something wrong with the search...');
+            clearLoader();
+        }
+
+    }
+    else {
         alert('Input is blank!');
     }
 
 };
 
-document.querySelector('.search').addEventListener('submit', e => {
+elements.searchForm.addEventListener('submit', e => {
     event.preventDefault();
     controlSearch();
+});
+
+elements.searchResPages.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if (btn) {
+        const goToPage = parseInt(btn.dataset.goto, 10);
+        searchView.clearResults();
+        searchView.renderResults(state.search.result, goToPage);
+    }
 });
