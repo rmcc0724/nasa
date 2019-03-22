@@ -1,13 +1,13 @@
 //Create an object that uses properties for each of the event listener classes
 export const elements = {
     searchForm: document.querySelector('.search'),
-    searchInput: document.querySelector('.search__field'),
     searchRes: document.querySelector('.results'),
     searchResList: document.querySelector('.results__list'),
     searchResPages: document.querySelector('.results__pages'),
     asteroid: document.querySelector('.asteroid'),
     likesMenu: document.querySelector('.likes__field'),
     likesList: document.querySelector('.likes__list'),
+    datePicker: document.querySelector('#datepicker')
 };
 
 //Create a variable loader and assign a string with the same name to it.

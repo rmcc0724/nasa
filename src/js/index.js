@@ -8,7 +8,8 @@ const state = {};
 
 //Here we create the search controller
 const controlSearch = async() => {
-
+    
+console.log(searchView.getInput());
     //1. Get query from view
     const query = searchView.getInput();
     console.log(query);
