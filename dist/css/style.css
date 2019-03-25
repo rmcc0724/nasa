@@ -243,6 +243,7 @@ h2 {
   /* height: 4.5rem; */
   display: block;
   width: 70px;
+  margin-right: 4em;
 }
 
 .search {
@@ -252,6 +253,7 @@ h2 {
   align-items: center;
   padding-left: 3rem;
   transition: all .3s;
+  margin-right: 30px;
 }
 
 .search:focus-within {
