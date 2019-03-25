@@ -13,10 +13,19 @@ export default class Asteroid {
             this.diameter = res.data.estimated_diameter.miles.estimated_diameter_max;
             this.hazardous = res.data.is_potentially_hazardous_asteroid;
             this.miss_distance = res.data.close_approach_data;
+            
             console.log(`Name: ${this.name}`);
-            console.log(`Diameter: ${this.diameter}`);
+            console.log(`Diameter: ${this.diameter} miles`);
             console.log(`Hazardous: ${this.hazardous}`);
-            console.log(`Miss distance: ${this.miss_distance[0].miss_distance.miles}`);
+             console.log(`Close Approach Data:`);
+            this.miss_distance.forEach(e => {
+                console.log(`Date: ${e.close_approach_date}`);
+                console.log(`Miss Distance: ${e.miss_distance.miles} miles`);
+                console.log(`Orbiting Body: ${e.orbiting_body}`);
+                console.log(`Relative Velocity: ${e.relative_velocity.miles_per_hour} mph`);
+                console.log(' ');
+            }
+                );
         }
         catch (error) {
             console.log(error);
