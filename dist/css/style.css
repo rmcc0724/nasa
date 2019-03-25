@@ -687,6 +687,6 @@ h2 {
 }
 
 
-.asteriod {
-    font-size: 2em;
+.asteroid {
+    font-size: initial !important;
 }

@@ -9,7 +9,14 @@ export default class Asteroid {
     async getAsteroid() {
         try {
             const res = await axios(`${proxy}https://api.nasa.gov/neo/rest/v1/neo/${this.id}?api_key=${key}`);
-            console.log(res.data);
+            this.name = res.data.name;
+            this.diameter = res.data.estimated_diameter.miles.estimated_diameter_max;
+            this.hazardous = res.data.is_potentially_hazardous_asteroid;
+            this.miss_distance = res.data.close_approach_data;
+            console.log(`Name: ${this.name}`);
+            console.log(`Diameter: ${this.diameter}`);
+            console.log(`Hazardous: ${this.hazardous}`);
+            console.log(`Miss distance: ${this.miss_distance[0].miss_distance.miles}`);
         }
         catch (error) {
             console.log(error);
@@ -17,6 +24,6 @@ export default class Asteroid {
         }
     }
 
-    
+
 
 }

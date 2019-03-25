@@ -11,21 +11,19 @@ const state = {};
 //Here we create the search controller
 const controlSearch = async() => {
 
-    console.log(searchView.getInput());
     //1. Get query from view
     const query = searchView.getInput();
-    console.log(query);
+    console.log(`${query} query`);
 
     //2. Create a Search object and add to the state
     if (query) {
+        console.log(query);
         state.search = new Search(query);
         renderLoader(elements.searchRes);
-
 
         //3. Prepare UI for the results
         searchView.clearInput();
         searchView.clearResults();
-
 
         try {
             // 4) Search for asteroids
@@ -70,8 +68,8 @@ const controlAsteroid = async() => {
             // Render recipe
             clearLoader();
             asteroidView.renderAsteroid(
-                state.asteroid,
-                state.likes.isLiked(id)
+                state.asteroid
+                // state.likes.isLiked(id)
             );
         }
         catch (err) {

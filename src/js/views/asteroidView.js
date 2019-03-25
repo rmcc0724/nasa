@@ -79,5 +79,5 @@ export const renderAsteroid = (asteroid, isLiked) => {
     //     </div>
     // `;
     // elements.recipe.insertAdjacentHTML('afterbegin', markup);
-    console.log('asteroidView');
+    // console.log(asteroid);
 };

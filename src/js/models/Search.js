@@ -13,7 +13,7 @@ export default class Search {
             console.log(this.result);
         }
         catch (error) {
-            alert(error);
+            alert(`There was an error in your search.`);
         }
     }
 }
