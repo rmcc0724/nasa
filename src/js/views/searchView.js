@@ -12,6 +12,7 @@ export const getInput = () => {
     }
 };
 
+
 export const clearInput = () => {
     elements.datePicker.value = '';
 };
@@ -60,7 +61,7 @@ const renderAsteroid = asteroid => {
                         <li>
                             <a class="results__link" href="#${asteroid.id}">
                                 <figure class="results__fig">
-                                    <img src="img/vesta_0715.jpg" alt="Asteroid">
+                                    <img src="dist/img/vesta_0715.jpg" alt="Asteroid">
                                 </figure>
                                 <div class="results__data">
                                     <h4 class="results__name">Name: ${asteroid.name}</h4>
@@ -77,7 +78,7 @@ const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
         <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
         <svg class="search__icon">
-            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+            <use href="dist/img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
         </svg>
     </button>
 `;
@@ -115,7 +116,9 @@ export const renderResults = (asteroids, page = 1, resPerPage = 5) => {
     const end = page * resPerPage;
 
     Object.keys(asteroids).map((asteroid) => {
-        let headMarkup = `<h2>Date: ${asteroid}</h2><br/>`;
+        let newDate = asteroid.slice('');
+        console.log(newDate);
+        let headMarkup = `<h2>Date: ${newDate[5]}${newDate[6]}/${newDate[8]}${newDate[9]}/${newDate[0]}${newDate[1]}${newDate[2]}${newDate[3]}</h2><br/>`;
         elements.searchResList.insertAdjacentHTML('beforeend', headMarkup);
         asteroids[asteroid].slice(start, end).forEach(renderAsteroid);
 
