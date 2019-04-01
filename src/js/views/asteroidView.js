@@ -1,22 +1,25 @@
-import { elements } from './base';
+import { elements } from "./base";
 
 export const clearAsteroid = () => {
-    elements.asteroid.innerHTML = '';
+    elements.asteroid.innerHTML = `
+    <ul class="close__data-results"></ul>`;
 };
 
+export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
 
-export const renderAsteroid = (asteroid, isLiked) => {
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage;
+
     const markup = `
         <figure class="recipe__fig">
-            <img src="img/vesta_0715.jpg" alt="${asteroid.name}" class="recipe__img">
+            <img src="img/vesta_0715.jpg" alt="${
+        asteroid.name
+        }" class="recipe__img">
             <h1 class="recipe__title">
                 <span>${asteroid.name}</span>
             </h1>
         </figure>
-
         <div class="recipe__details">
-
-
         <div class="recipe__ingredients">
             <ul class="recipe__ingredient-list">
             <li>Name: ${asteroid.name}</li>
@@ -25,77 +28,74 @@ export const renderAsteroid = (asteroid, isLiked) => {
             </ul>
         </div>
     <div class="recipe__ingredients">
-<h4>Close Approach Data</h4><br>
-  <ul class="recipe__ingredient-list">${asteroid.miss_distance.map(renderApproachData)}</ul>`;
+<h4>Close Approach Data</h4><br>`;
 
-    // <div class="recipe__info">
-    //     <svg class="recipe__info-icon">
-    //         <use href="img/icons.svg#icon-stopwatch"></use>
-    //     </svg>
-    //     <span class="recipe__info-data recipe__info-data--minutes">${recipe.time}</span>
-    //     <span class="recipe__info-text"> minutes</span>
-    // </div>
-    //         <div class="recipe__info">
-    //             <svg class="recipe__info-icon">
-    //                 <use href="img/icons.svg#icon-man"></use>
-    //             </svg>
-    //             <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
-    //             <span class="recipe__info-text"> servings</span>
+    asteroid.miss_distance.forEach(renderCloseResults)
+    elements.asteroid.insertAdjacentHTML("afterbegin", markup);
+    //   console.log(asteroid);
+};
 
-    //             <div class="recipe__info-buttons">
-    //                 <button class="btn-tiny btn-decrease">
-    //                     <svg>
-    //                         <use href="img/icons.svg#icon-circle-with-minus"></use>
-    //                     </svg>
-    //                 </button>
-    //                 <button class="btn-tiny btn-increase">
-    //                     <svg>
-    //                         <use href="img/icons.svg#icon-circle-with-plus"></use>
-    //                     </svg>
-    //                 </button>
-    //             </div>
+const renderCloseResults = (data, page = 1, resPerPage = 5) => {
+    console.log(data.close_approach_date);
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage;
+    console.log(renderApproachData(data));
+    let markup = `<ul class="close__data-results">`;
+    markup += renderApproachData(data);
+    markup += `</ul>`;
+    elements.asteroid.insertAdjacentHTML("beforeend", markup);
+}
 
-    //         </div>
-    //         <button class="recipe__love">
-    //             <svg class="header__likes">
-    //                 <use href="img/icons.svg#icon-heart${isLiked ? '' : '-outlined'}"></use>
-    //             </svg>
-    //         </button>
-    //     </div>
+const renderApproachData = e =>
+
+    `<li>Date: ${e.close_approach_date}</li>
+                <li>Miss Distance: ${e.miss_distance.miles} miles</li>
+                <li>Orbiting Body: ${e.orbiting_body}</li>
+                <li>Relative Velocity: ${
+    e.relative_velocity.miles_per_hour
+    }mph</li>`;
 
 
-    // <button class="btn-small recipe__btn recipe__btn--add">
-    //     <svg class="search__icon">
-    //         <use href="img/icons.svg#icon-shopping-cart"></use>
-    //     </svg>
-    //     <span>Add to shopping list</span>
-    // </button>
+// type: 'prev' or 'next'
+const createButton = (page, type) => `
+    <button class="btn-inline results__btn--${type}" data-goto=${
+    type === "prev" ? page - 1 : page + 1
+    }>
+        <span>Page ${type === "prev" ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+            <use src="img/icons.svg#icon-triangle-${
+    type === "prev" ? "left" : "right"
+    }"></use>
+        </svg>
+    </button>
+`;
 
+const renderButtons = (page, numResults, resPerPage) => {
+    const pages = Math.ceil(numResults / resPerPage);
 
-    //     <div class="recipe__directions">
-    //         <h2 class="heading-2">How to cook it</h2>
-    //         <p class="recipe__directions-text">
-    //             This recipe was carefully designed and tested by
-    //             <span class="recipe__by">${recipe.author}</span>. Please check out directions at their website.
-    //         </p>
-    //         <a class="btn-small recipe__btn" href="${recipe.url}" target="_blank">
-    //             <span>Directions</span>
-    //             <svg class="search__icon">
-    //                 <use href="img/icons.svg#icon-triangle-right"></use>
-    //             </svg>
-
-    //         </a>
-    //     </div>
-
-    elements.asteroid.insertAdjacentHTML('afterbegin', markup);
-    console.log(asteroid);
+    let button;
+    if (page === 1 && pages > 1) {
+        // Only button to go to next page
+        button = createButton(page, "next");
+    } else if (page < pages) {
+        // Both buttons
+        button = `
+            ${createButton(page, "prev")}
+            ${createButton(page, "next")}
+        `;
+    } else if (page === pages && pages > 1) {
+        // Only button to go to prev page
+        button = createButton(page, "prev");
+    } else if (page === pages && pages === 1) {
+        // Only button to go to prev page
+        button = "";
+    }
+    elements.asteroid.insertAdjacentHTML("afterbegin", button);
 };
 
 
+        // elements.asteroid.insertAdjacentHTML('beforeend', markup);
+// console.log(e.close_approach_date);
 
-    const renderApproachData = e => 
-        `<li>Date: ${e.close_approach_date}</li>
-            <li>Miss Distance: ${e.miss_distance.miles} miles</li>
-            <li>Orbiting Body: ${e.orbiting_body}</li>
-            <li>Relative Velocity: ${e.relative_velocity.miles_per_hour} mph</li>`;
+
 

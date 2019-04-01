@@ -7,7 +7,8 @@ export const elements = {
     asteroid: document.querySelector('.asteroid'),
     likesMenu: document.querySelector('.likes__field'),
     likesList: document.querySelector('.likes__list'),
-    datePicker: document.querySelector('#datepicker')
+    datePicker: document.querySelector('#datepicker'),
+    asteroidCloseData: document.querySelector('.close__data-results')
 };
 
 //Create a variable loader and assign a string with the same name to it.
