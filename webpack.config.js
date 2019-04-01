@@ -1,30 +1,30 @@
 const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/js/index.js',
+    entry: ['babel-polyfill', './src/js/index.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/bundle.js',
-        publicPath: './dist/' // relative to HTML page
+        filename: 'js/bundle.js'
     },
-    mode: 'development',
     devServer: {
-        contentBase: path.resolve(__dirname, './dist'),
-        writeToDisk: true
-    },
-    // Added CSS & Style Loader
-    module: {
-        rules: [{
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader']
-        }]
+        contentBase: './dist'
     },
     plugins: [
-        new HtmlWebPackPlugin({
+        new HtmlWebpackPlugin({
             filename: 'index.html',
             template: './src/index.html'
         })
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader'
+                }
+            }
+        ]
+    }
 };

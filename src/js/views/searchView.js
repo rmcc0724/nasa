@@ -61,7 +61,7 @@ const renderAsteroid = asteroid => {
                         <li>
                             <a class="results__link" href="#${asteroid.id}">
                                 <figure class="results__fig">
-                                    <img src="dist/img/vesta_0715.jpg" alt="Asteroid">
+                                    <img src="img/vesta_0715.jpg" alt="Asteroid">
                                 </figure>
                                 <div class="results__data">
                                     <h4 class="results__name">Name: ${asteroid.name}</h4>
@@ -78,7 +78,7 @@ const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
         <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
         <svg class="search__icon">
-            <use href="dist/img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+            <use src="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
         </svg>
     </button>
 `;

@@ -8,7 +8,7 @@ export const clearAsteroid = () => {
 export const renderAsteroid = (asteroid, isLiked) => {
     const markup = `
         <figure class="recipe__fig">
-            <img src="dist/img/vesta_0715.jpg" alt="${asteroid.name}" class="recipe__img">
+            <img src="img/vesta_0715.jpg" alt="${asteroid.name}" class="recipe__img">
             <h1 class="recipe__title">
                 <span>${asteroid.name}</span>
             </h1>
