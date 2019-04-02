@@ -5,10 +5,13 @@ export const elements = {
     searchResList: document.querySelector('.results__list'),
     searchResPages: document.querySelector('.results__pages'),
     asteroid: document.querySelector('.asteroid'),
+    asteroidView: document.querySelector('.asteroid-view'),
     likesMenu: document.querySelector('.likes__field'),
     likesList: document.querySelector('.likes__list'),
     datePicker: document.querySelector('#datepicker'),
-    asteroidCloseData: document.querySelector('.close__data-results')
+    asteroidCloseData: document.querySelector('.close__data-results'),
+    asteroidCloseList: document.querySelector('.close__data-list'),
+    introText: document.querySelector('.text-intro')
 };
 
 //Create a variable loader and assign a string with the same name to it.

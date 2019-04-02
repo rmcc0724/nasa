@@ -53,6 +53,8 @@ const controlAsteroid = async() => {
     if (id) {
         // Prepare UI for changes
         asteroidView.clearAsteroid();
+        asteroidView.clearCloseData();
+
         renderLoader(elements.asteroid);
 
         // Highlight selected search item

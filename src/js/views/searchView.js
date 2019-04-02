@@ -1,7 +1,6 @@
 import { elements } from './base';
 
 export const getInput = () => {
-
     let date = elements.datePicker.value.split('');
     console.log(`${date} input`);
     if (`${date}`) {
@@ -12,11 +11,9 @@ export const getInput = () => {
     }
 };
 
-
 export const clearInput = () => {
     elements.datePicker.value = '';
 };
-
 
 export const clearResults = () => {
     elements.searchResList.innerHTML = '';
