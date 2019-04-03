@@ -10,10 +10,9 @@ export const clearCloseData = () => {
   elements.asteroidClosePages.innerHTML = "";
 };
 
-export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
+export const renderAsteroid = (asteroid, page = 1, resPerPage = 5) => {
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
-
   const markup = `
         <figure class="recipe__fig">
             <img src="img/vesta_0715.jpg" alt="${
@@ -35,23 +34,20 @@ export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
              <h4>Close Approach Data:</h4><br>
           </div>
         </div>`;
-  renderCloseResults(asteroid.miss_distance);
+  // renderCloseResults(asteroid.miss_distance);
   elements.asteroidView.insertAdjacentHTML("afterbegin", markup);
   //   console.log(asteroid);
 };
 
-const renderCloseResults = (data, page = 1, resPerPage = 5) => {
+export const renderCloseResults = (data, page = 1, resPerPage = 5) => {
   elements.asteroidCloseList.innerHTML = "";
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
   data.slice(start, end).forEach(renderApproachData);
-// console.log(`${data.length} ${page} ${resPerPage}`);
-  // render pagination buttons
   renderButtons(page, data.length, resPerPage);
 };
 
 const renderApproachData = e => {
-
   const markup = `<li>Date: ${e.close_approach_date}</li>
                 <li>Miss Distance: ${e.miss_distance.miles} miles</li>
                 <li>Orbiting Body: ${e.orbiting_body}</li>
@@ -78,7 +74,7 @@ const createButton = (page, type) => `
 
 const renderButtons = (page, numResults, resPerPage) => {
   const pages = Math.ceil(numResults / resPerPage);
-
+console.log(`${page} ${numResults} ${resPerPage}`);
   let button;
   if (page === 1 && pages > 1) {
     // Only button to go to next page
@@ -96,5 +92,5 @@ const renderButtons = (page, numResults, resPerPage) => {
     // Only button to go to prev page
     button = "";
   }
-  elements.asteroidClosePages.insertAdjacentHTML("beforeend", button);
+  elements.asteroidClosePages.insertAdjacentHTML("afterbegin", button);
 };
