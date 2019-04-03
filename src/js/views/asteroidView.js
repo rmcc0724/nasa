@@ -44,7 +44,7 @@ const renderCloseResults = (data, page = 1, resPerPage = 5) => {
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
   data.slice(start, end).forEach(renderApproachData);
-
+// console.log(`${data.length} ${page} ${resPerPage}`);
   // render pagination buttons
   renderButtons(page, data.length, resPerPage);
 };
@@ -68,7 +68,7 @@ const createButton = (page, type) => `
   }>
         <span>Page ${type === "prev" ? page - 1 : page + 1}</span>
         <svg class="search__icon">
-            <use src="img/icons.svg#icon-triangle-${
+            <use href="img/icons.svg#icon-triangle-${
   type === "prev" ? "left" : "right"
   }"></use>
         </svg>
@@ -95,5 +95,5 @@ const renderButtons = (page, numResults, resPerPage) => {
     // Only button to go to prev page
     button = "";
   }
-  elements.asteroid.insertAdjacentHTML("afterbegin", button);
+  elements.asteroid.insertAdjacentHTML("beforeend", button);
 };

@@ -734,3 +734,7 @@ i.fa.fa-bookmark-o {
     font-size: xx-large;
     color: #033a92;
 }
+
+.asteroid .btn-inline {
+  background-color: #c5c5c5;
+}
