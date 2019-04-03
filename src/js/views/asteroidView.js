@@ -34,13 +34,11 @@ export const renderAsteroid = (asteroid, page = 1, resPerPage = 5) => {
              <h4>Close Approach Data:</h4><br>
           </div>
         </div>`;
-  // renderCloseResults(asteroid.miss_distance);
   elements.asteroidView.insertAdjacentHTML("afterbegin", markup);
-  //   console.log(asteroid);
 };
 
 export const renderCloseResults = (data, page = 1, resPerPage = 5) => {
-  elements.asteroidCloseList.innerHTML = "";
+  // elements.asteroidCloseList.innerHTML = "";
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
   data.slice(start, end).forEach(renderApproachData);
