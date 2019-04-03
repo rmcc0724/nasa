@@ -11,6 +11,7 @@ export const elements = {
     datePicker: document.querySelector('#datepicker'),
     asteroidCloseData: document.querySelector('.close__data-results'),
     asteroidCloseList: document.querySelector('.close__data-list'),
+    asteroidClosePages: document.querySelector('.close__data-pages'),
     introText: document.querySelector('.text-intro')
 };
 

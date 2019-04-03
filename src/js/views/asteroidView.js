@@ -7,6 +7,7 @@ export const clearAsteroid = () => {
 
 export const clearCloseData = () => {
   elements.asteroidCloseList.innerHTML = "";
+  elements.asteroidClosePages.innerHTML = "";
 };
 
 export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
@@ -95,5 +96,5 @@ const renderButtons = (page, numResults, resPerPage) => {
     // Only button to go to prev page
     button = "";
   }
-  elements.asteroid.insertAdjacentHTML("beforeend", button);
+  elements.asteroidClosePages.insertAdjacentHTML("beforeend", button);
 };
