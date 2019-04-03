@@ -16,8 +16,8 @@ export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
   const markup = `
         <figure class="recipe__fig">
             <img src="img/vesta_0715.jpg" alt="${
-              asteroid.name
-            }" class="recipe__img">
+    asteroid.name
+    }" class="recipe__img">
             <h1 class="recipe__title">
                 <span>${asteroid.name}</span>
             </h1>
@@ -40,35 +40,37 @@ export const renderAsteroid = (asteroid, isLiked, page = 1, resPerPage = 5) => {
 };
 
 const renderCloseResults = (data, page = 1, resPerPage = 5) => {
-//   console.log(data.close_approach_date);
-elements.asteroidCloseList.innerHTML = "";
+  elements.asteroidCloseList.innerHTML = "";
   const start = (page - 1) * resPerPage;
   const end = page * resPerPage;
   data.slice(start, end).forEach(renderApproachData);
+
+  // render pagination buttons
+  renderButtons(page, data.length, resPerPage);
 };
 
 const renderApproachData = e => {
 
-const markup = `<li>Date: ${e.close_approach_date}</li>
+  const markup = `<li>Date: ${e.close_approach_date}</li>
                 <li>Miss Distance: ${e.miss_distance.miles} miles</li>
                 <li>Orbiting Body: ${e.orbiting_body}</li>
                 <li>Relative Velocity: ${
-                  e.relative_velocity.miles_per_hour
-                }mph</li><br>`;
-                  elements.asteroidCloseList.insertAdjacentHTML("beforeend", markup);
-            }
+    e.relative_velocity.miles_per_hour
+    }mph</li><br>`;
+  elements.asteroidCloseList.insertAdjacentHTML("beforeend", markup);
+}
 
 
 // type: 'prev' or 'next'
 const createButton = (page, type) => `
     <button class="btn-inline results__btn--${type}" data-goto=${
   type === "prev" ? page - 1 : page + 1
-}>
+  }>
         <span>Page ${type === "prev" ? page - 1 : page + 1}</span>
         <svg class="search__icon">
             <use src="img/icons.svg#icon-triangle-${
-              type === "prev" ? "left" : "right"
-            }"></use>
+  type === "prev" ? "left" : "right"
+  }"></use>
         </svg>
     </button>
 `;
@@ -95,6 +97,3 @@ const renderButtons = (page, numResults, resPerPage) => {
   }
   elements.asteroid.insertAdjacentHTML("afterbegin", button);
 };
-
-// elements.asteroid.insertAdjacentHTML('beforeend', markup);
-// console.log(e.close_approach_date);

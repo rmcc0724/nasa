@@ -728,3 +728,9 @@ h2 {
 .close__data-list {
   list-style: none;
 }
+
+
+i.fa.fa-bookmark-o {
+    font-size: xx-large;
+    color: #033a92;
+}
