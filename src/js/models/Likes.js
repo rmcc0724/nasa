@@ -1,42 +1,42 @@
-export default class Likes {
+export default class bookmarks {
     constructor() {
-        this.likes = [];
+        this.bookmarks = [];
     }
 
-    addLike(id, title, author, img) {
-        const like = { id, title, author, img };
-        this.likes.push(like);
+    addbookmark(id, title, author, img) {
+        const bookmark = { id, title, author, img };
+        this.bookmarks.push(bookmark);
 
         // Perist data in localStorage
         this.persistData();
 
-        return like;
+        return bookmark;
     }
 
-    deleteLike(id) {
-        const index = this.likes.findIndex(el => el.id === id);
-        this.likes.splice(index, 1);
+    deletebookmark(id) {
+        const index = this.bookmarks.findIndex(el => el.id === id);
+        this.bookmarks.splice(index, 1);
 
         // Perist data in localStorage
         this.persistData();
     }
 
-    isLiked(id) {
-        return this.likes.findIndex(el => el.id === id) !== -1;
+    isbookmarked(id) {
+        return this.bookmarks.findIndex(el => el.id === id) !== -1;
     }
 
-    getNumLikes() {
-        return this.likes.length;
+    getNumbookmarks() {
+        return this.bookmarks.length;
     }
 
     persistData() {
-        localStorage.setItem('likes', JSON.stringify(this.likes));
+        localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks));
     }
 
     readStorage() {
-        const storage = JSON.parse(localStorage.getItem('likes'));
+        const storage = JSON.parse(localStorage.getItem('bookmarks'));
         
-        // Restoring likes from the localStorage
-        if (storage) this.likes = storage;
+        // Restoring bookmarks from the localStorage
+        if (storage) this.bookmarks = storage;
     }
 }
