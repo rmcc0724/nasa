@@ -11,7 +11,7 @@ export const clearCloseData = () => {
 };
 
 export const renderAsteroid = (asteroid, isLiked) => {
-  
+
   const markup = `
         <figure class="recipe__fig">
             <img src="img/vesta_0715.jpg" alt="${
@@ -25,7 +25,7 @@ export const renderAsteroid = (asteroid, isLiked) => {
           <div class="recipe__ingredients">            
           <button class="recipe__love">
           <svg class="header__likes">
-              <use href="img/bookmark.svg#surface1"></use>
+              <use href="img/book-mark.svg#book-mark"></use>
           </svg>
       </button>
             <ul class="recipe__ingredient-list">
@@ -42,6 +42,12 @@ export const renderAsteroid = (asteroid, isLiked) => {
           </button>
         </div>`;
   elements.asteroidView.insertAdjacentHTML("afterbegin", markup);
+
+  // if(isLiked) {
+  //   elements.bookmarked.style.fill = "#fc3b1b";
+  // } else {
+  //   elements.bookmarked.style.fill = "#fff"
+  // }
 };
 
 export const renderCloseResults = (data, page = 1, resPerPage = 5) => {

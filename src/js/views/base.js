@@ -12,6 +12,7 @@ export const elements = {
     asteroidCloseData: document.querySelector('.close__data-results'),
     asteroidCloseList: document.querySelector('.close__data-list'),
     asteroidClosePages: document.querySelector('.close__data-pages'),
+    bookmarked: document.querySelector('.recipe__love svg '),
     introText: document.querySelector('.text-intro')
 };
 
