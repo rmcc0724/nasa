@@ -23,7 +23,7 @@ export const renderAsteroid = (asteroid, isLiked) => {
         </figure>
         <div class="recipe__details">
           <div class="recipe__ingredients">            
-          <button class="recipe__love">
+          <button class="recipe__love svg ${isLiked ? 'recipe_loved svg' : '' }">
           <svg class="header__likes">
               <use href="img/book-mark.svg#book-mark"></use>
           </svg>
