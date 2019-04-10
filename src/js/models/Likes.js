@@ -3,8 +3,8 @@ export default class Likes {
         this.likes = [];
     }
 
-    addLike(id, title, author, img) {
-        const like = { id, title, author, img };
+    addLike(id, name, hazardous) {
+        const like = { id, name, hazardous };
         this.likes.push(like);
 
         // Perist data in localStorage

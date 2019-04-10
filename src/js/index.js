@@ -152,8 +152,8 @@ elements.asteroidClosePages.addEventListener('click', e => {
 // Handling recipe button clicks
 elements.asteroid.addEventListener('click', e => {
   if (e.target.matches('.recipe__love, .recipe__love *')) {
-        // Like controller
-       // controlLike();
-       console.log('Likes ctrl');
+    console.log('Likes ctrl');
+    // Like controller
+       controlLike();
     }
 });
