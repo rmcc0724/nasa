@@ -10,7 +10,7 @@ export const clearCloseData = () => {
   elements.asteroidClosePages.innerHTML = "";
 };
 
-export const renderAsteroid = (asteroid, isLiked) => {
+export const renderAsteroid = (asteroid) => {
 
   const markup = `
         <figure class="recipe__fig">
@@ -23,7 +23,7 @@ export const renderAsteroid = (asteroid, isLiked) => {
         </figure>
         <div class="recipe__details">
           <div class="recipe__ingredients">            
-          <button class="recipe__love svg ${isLiked ? 'recipe_loved svg' : '' }">
+          <button class="recipe__love svg recipe_loved svg">
           <svg class="header__likes">
               <use href="img/book-mark.svg#book-mark"></use>
           </svg>
@@ -42,12 +42,6 @@ export const renderAsteroid = (asteroid, isLiked) => {
           </button>
         </div>`;
   elements.asteroidView.insertAdjacentHTML("afterbegin", markup);
-
-  // if(isLiked) {
-  //   elements.bookmarked.style.fill = "#fc3b1b";
-  // } else {
-  //   elements.bookmarked.style.fill = "#fff"
-  // }
 };
 
 export const renderCloseResults = (data, page = 1, resPerPage = 5) => {

@@ -9,14 +9,14 @@ export default class Likes {
 
         // Perist data in localStorage
         this.persistData();
-
+        console.log(this.likes)
         return like;
     }
 
     deleteLike(id) {
         const index = this.likes.findIndex(el => el.id === id);
         this.likes.splice(index, 1);
-
+        console.log(this.likes)
         // Perist data in localStorage
         this.persistData();
     }

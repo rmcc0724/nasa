@@ -76,6 +76,7 @@ const controlAsteroid = async() => {
                 state.asteroid
             );
             asteroidView.renderCloseResults(state.asteroid.miss_distance);
+            likesView.toggleLikeBtn(state.likes.isLiked(id));
         }
         catch (err) {
             console.log(err);
@@ -89,17 +90,15 @@ const controlAsteroid = async() => {
  */
 const controlLike = () => {
     if (!state.likes) state.likes = new Likes();
-    const currentID = state.recipe.id;
-
+    const currentID = state.asteroid.id;
+    console.log(currentID)
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
         // Add like to the state
         const newLike = state.likes.addLike(
             currentID,
-            state.recipe.title,
-            state.recipe.author,
-            state.recipe.img
-        );
+            state.asteroid.name,
+            state.asteroid.hazardous        );
         // Toggle the like button
         likesView.toggleLikeBtn(true);
 
@@ -119,8 +118,21 @@ const controlLike = () => {
         likesView.deleteLike(currentID);
     }
     likesView.toggleLikeMenu(state.likes.getNumLikes());
+    console.log(state.likes.getNumLikes());
 };
 
+window.addEventListener('load', () => {
+    state.likes = new Likes();
+
+    // Restore likes
+    state.likes.readStorage();
+
+    // Toggle like menu button
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+    // Render the existing likes
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
 
 
 

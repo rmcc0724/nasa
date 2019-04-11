@@ -751,3 +751,7 @@ i.fa.fa-bookmark-o {
 .close__data-pages {
   margin-bottom: 20px;
 }
+
+svg.header__likes_true {
+  fill: #fc3b1b;
+}

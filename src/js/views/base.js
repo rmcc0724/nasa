@@ -12,7 +12,8 @@ export const elements = {
     asteroidCloseData: document.querySelector('.close__data-results'),
     asteroidCloseList: document.querySelector('.close__data-list'),
     asteroidClosePages: document.querySelector('.close__data-pages'),
-    introText: document.querySelector('.text-intro')
+    introText: document.querySelector('.text-intro'),
+    likedHeader: document.querySelector('.header__likes')
 };
 
 //Create a variable loader and assign a string with the same name to it.
