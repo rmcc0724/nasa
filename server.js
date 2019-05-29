@@ -5,7 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const items = require('./routes/api/items');
+const likes = require('./routes/apis/likes');
 //Body parser middleware
 app.use(bodyParser.json());
 //DB config gets the URL from  keys.js for our mongo DB
@@ -21,7 +21,7 @@ mongoose
     .catch(err=> console.log('Errors: ' + err));
 
 //Anything going to api/items will go to the items variable, can also just be '/'
-    app.use('/api/items', items);
+    app.use('/api/likes', likes);
 
 //Set the server port to 5000
     const port = process.env.PORT || 5000;
