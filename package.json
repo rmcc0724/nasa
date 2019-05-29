@@ -1,33 +1,30 @@
 {
-  "name": "nasa",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "nasa project",
-  "main": "index.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development --open"
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Reid McCulloch",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmcc0724/nasa.git"
+  },
+  "author": "Reid M",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmcc0724/nasa/issues"
+  },
+  "homepage": "https://github.com/rmcc0724/nasa#readme",
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "copy-webpack-plugin": "^5.0.0",
-    "css-loader": "^2.1.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "file-loader": "^3.0.1",
-    "html-webpack-plugin": "^3.2.0",
-    "image-webpack-loader": "^4.6.0",
-    "style-loader": "^0.23.1",
-    "url-loader": "^1.1.2",
-    "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.2.1"
-  },
-  "dependencies": {
-    "axios": "^0.18.0",
-    "babel-polyfill": "^6.26.0"
+    "nodemon": "^1.19.1",
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.11"
   }
 }
