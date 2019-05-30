@@ -3,7 +3,7 @@ export default class Likes {
         this.likes = [];
     }
 
-    //Here we need to add the like from the database
+    //Here we need to add the like to the database
     addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
         this.likes.push(like);
@@ -37,7 +37,7 @@ export default class Likes {
     }
 
     //Here we need to get the likes from the database when the app loads
-    readStorage() {
+    readDataBase() {
         const storage = JSON.parse(localStorage.getItem('likes'));
         
         // Restoring likes from the localStorage

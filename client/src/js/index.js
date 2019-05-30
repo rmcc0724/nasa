@@ -7,6 +7,10 @@ import * as searchView from './views/searchView';
 import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
+import axios from 'axios';
+var http = require('http');
+
+//import * as routes from '../../routes/apis/likes';
 
 //Declare a new state variable
 const state = {};
@@ -89,6 +93,25 @@ const controlAsteroid = async() => {
  * LIKE CONTROLLER
  */
 const controlLike = () => {
+    var url = process.argv[2];
+
+    http.get('http://localhost:5000', function(response) {
+      var finalData = "";
+    
+      response.on("data", function (data) {
+        finalData += data.toString();
+      });
+    
+      response.on("end", function() {
+        console.log(finalData.length);
+        console.log(finalData);
+      });
+    
+    });
+///////////////////////////////////////////////////
+
+
+
     if (!state.likes) state.likes = new Likes();
     const currentID = state.asteroid.id;
     console.log(currentID)
@@ -125,7 +148,7 @@ window.addEventListener('load', () => {
     state.likes = new Likes();
 
     // Restore likes
-    state.likes.readStorage();
+    state.likes.readDataBase();
 
     // Toggle like menu button
     likesView.toggleLikeMenu(state.likes.getNumLikes());
