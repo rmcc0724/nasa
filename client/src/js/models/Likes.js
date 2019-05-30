@@ -1,7 +1,23 @@
+import axios from 'axios';
+
 export default class Likes {
     constructor() {
         this.likes = [];
+
+        async function getLikes() {
+            try {
+              const result = await axios(`http://localhost:5000`);
+              const data = result.data;
+              console.log(data);
+            }
+            catch (error) {
+              console.log("Error Happened " + error);
+            }
+          }
+          getLikes();
     }
+
+    
 
     //Here we need to add the like to the database
     addLike(id, name, hazardous) {

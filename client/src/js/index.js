@@ -8,7 +8,8 @@ import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
 import axios from 'axios';
-var http = require('http');
+import { proxy } from '../../config';
+
 
 //import * as routes from '../../routes/apis/likes';
 
@@ -92,25 +93,11 @@ const controlAsteroid = async() => {
 /** 
  * LIKE CONTROLLER
  */
+
 const controlLike = () => {
-    var url = process.argv[2];
-
-    http.get('http://localhost:5000', function(response) {
-      var finalData = "";
-    
-      response.on("data", function (data) {
-        finalData += data.toString();
-      });
-    
-      response.on("end", function() {
-        console.log(finalData.length);
-        console.log(finalData);
-      });
-    
-    });
-///////////////////////////////////////////////////
 
 
+    /////////////////////////////////////////
 
     if (!state.likes) state.likes = new Likes();
     const currentID = state.asteroid.id;
