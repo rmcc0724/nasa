@@ -4,14 +4,18 @@ const Like = require("../../models/Like");
 
 //This gets the likes from the database and sorts them in desc order
 router.get('/', (req, res) => {
+  console.log("Getting Likes");
   Like.find()
     .sort({ date: -1 })
     .then(likes => res.json(likes));
+    //Use console.log(likes) to see what data returns in the terminal
 });
 
 router.post('/', (req, res) => {
   const newLike = new Like({
-    name: req.body.name
+    id: req.body.id,
+    name: req.body.name,
+    hazardous: req.body.hazardous
   });
   newLike.save().then(like => res.json(like));
 });

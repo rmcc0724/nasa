@@ -7,15 +7,14 @@ LikesSchema = new Schema({
     id: {
         type: String,
         required: true
-    },
+    }, 
     name: {
         type: String,
         required: true
     },
     hazardous: {
-        type: Boolean,
+        type: String,
         required: true
     }
 })
-
-module.exports = Likes = mongoose.model('like', LikesSchema);
+module.exports = Like = mongoose.model('like', LikesSchema);
