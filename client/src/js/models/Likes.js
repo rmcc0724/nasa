@@ -3,7 +3,6 @@ import axios from 'axios';
 export default class Likes {
     constructor() {
         this.likes = [];
-        this.format=[];
         this.getLikes();
     }
     async getLikes() {
@@ -24,12 +23,23 @@ export default class Likes {
     //Here we need to add the like to the database
     addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
-        this.likes.push(like);
+        console.log(like);
 
+        try {
+            axios({
+                method: 'post',
+                url: 'http://localhost:5000',
+                data: like
+              });
+              console.log("Yay");
+              this.persistData();
+        } catch (error) {
+                //
+        }
+        // this.likes.push(like);
         // Perist data in localStorage
         //Here we need to write the likes to the database
-        // this.persistData();
-
+        
         console.log(this.likes)
         return like;
     }
