@@ -7,11 +7,6 @@ import * as searchView from './views/searchView';
 import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
-import axios from 'axios';
-import { proxy } from '../../config';
-
-
-//import * as routes from '../../routes/apis/likes';
 
 //Declare a new state variable
 const state = {};
@@ -94,14 +89,16 @@ const controlAsteroid = async() => {
  * LIKE CONTROLLER
  */
 
-const controlLike = () => {
+const controlLike = async() => {
 
 
     /////////////////////////////////////////
+    console.log(state.likes);
 
     if (!state.likes) state.likes = new Likes();
     const currentID = state.asteroid.id;
     console.log(currentID)
+
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
         // Add like to the state
@@ -131,11 +128,13 @@ const controlLike = () => {
     console.log(state.likes.getNumLikes());
 };
 
-window.addEventListener('load', () => {
-    state.likes = new Likes();
+window.addEventListener('load', async() => {
 
-    // Restore likes
-    state.likes.readDataBase();
+    state.likes = new Likes();
+     // Restore likes
+     state.likes.readStorage();
+     console.log(state.likes);
+
 
     // Toggle like menu button
     likesView.toggleLikeMenu(state.likes.getNumLikes());

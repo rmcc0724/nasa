@@ -3,22 +3,24 @@ import axios from 'axios';
 export default class Likes {
     constructor() {
         this.likes = [];
-
-        async function getLikes() {
+        this.format=[];
+        this.getLikes();
+    }
+    async getLikes() {
             try {
               const result = await axios(`http://localhost:5000`);
               const data = result.data;
-              console.log(data);
+              this.likes = data;
+              this.persistData();
+              console.log(this.likes);
             }
             catch (error) {
               console.log("Error Happened " + error);
             }
-          }
-          getLikes();
+
+            
     }
-
-    
-
+ 
     //Here we need to add the like to the database
     addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
@@ -26,7 +28,8 @@ export default class Likes {
 
         // Perist data in localStorage
         //Here we need to write the likes to the database
-        this.persistData();
+        // this.persistData();
+
         console.log(this.likes)
         return like;
     }
@@ -34,7 +37,7 @@ export default class Likes {
     ///Here we need to remove the like from the database
     deleteLike(id) {
         const index = this.likes.findIndex(el => el.id === id);
-        this.likes.splice(index, 1);
+        // this.likes.splice(index, 1);
         console.log(this.likes)
         // Perist data in localStorage
         this.persistData();
@@ -48,12 +51,17 @@ export default class Likes {
         return this.likes.length;
     }
 
+    returnLikes() {
+       // console.log(this.likes);
+        return this.likes;
+    }
+
     persistData() {
         localStorage.setItem('likes', JSON.stringify(this.likes));
     }
 
-    //Here we need to get the likes from the database when the app loads
-    readDataBase() {
+    readStorage() {
+        //console.log(localStorage);
         const storage = JSON.parse(localStorage.getItem('likes'));
         
         // Restoring likes from the localStorage
