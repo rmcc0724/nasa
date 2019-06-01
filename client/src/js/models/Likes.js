@@ -10,6 +10,7 @@ export default class Likes {
               const result = await axios(`http://localhost:5000`);
               const data = result.data;
               this.likes = data;
+              this.likes_id = data._id
               this.persistData();
               console.log(this.likes);
             }
@@ -21,17 +22,17 @@ export default class Likes {
     }
  
     //Here we need to add the like to the database
-    addLike(id, name, hazardous) {
+    async addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
         console.log(like);
-
         try {
             axios({
                 method: 'post',
                 url: 'http://localhost:5000',
                 data: like
               });
-              console.log("Yay");
+              console.log("Item Added");
+              this.getLikes();
               this.persistData();
         } catch (error) {
                 //
@@ -46,6 +47,22 @@ export default class Likes {
 
     ///Here we need to remove the like from the database
     deleteLike(id) {
+        try {
+            axios({
+                method: 'delete',
+                url: `http://localhost:5000/${id}`
+              });
+              console.log("Item Deleted");
+              this.getLikes();
+              this.persistData();
+        } catch (error) {
+                //
+        }
+
+
+
+
+        
         const index = this.likes.findIndex(el => el.id === id);
         // this.likes.splice(index, 1);
         console.log(this.likes)

@@ -93,17 +93,18 @@ const controlLike = async() => {
 
 
     /////////////////////////////////////////
-    console.log(state.likes);
+    console.log(`Likes ctrl fired `);
+    //console.log(state.likes._id);
 
     if (!state.likes) state.likes = new Likes();
     const currentID = state.asteroid.id;
-    console.log(currentID)
+    // console.log(currentID)
 
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
         // Add like to the state
         const newLike = state.likes.addLike(
-            currentID,
+            state.asteroid.id,
             state.asteroid.name,
             state.asteroid.hazardous        );
         // Toggle the like button
@@ -116,16 +117,16 @@ const controlLike = async() => {
     }
     else {
         // Remove like from the state
-        state.likes.deleteLike(currentID);
+        //state.likes.deleteLike(currentID);
 
         // Toggle the like button
         likesView.toggleLikeBtn(false);
 
         // Remove like from UI list
-        likesView.deleteLike(currentID);
+        //likesView.deleteLike(currentID);
     }
     likesView.toggleLikeMenu(state.likes.getNumLikes());
-    console.log(state.likes.getNumLikes());
+    // console.log(state.likes.getNumLikes());
 };
 
 window.addEventListener('load', async() => {
