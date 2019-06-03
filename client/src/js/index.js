@@ -89,41 +89,42 @@ const controlAsteroid = async() => {
  * LIKE CONTROLLER
  */
 
-const controlLike = async() => {
-
-
+const controlLike = () => {
     /////////////////////////////////////////
     console.log(`Likes ctrl fired `);
-    //console.log(state.likes._id);
 
     if (!state.likes) state.likes = new Likes();
+    
     const currentID = state.asteroid.id;
-    // console.log(currentID)
 
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
-        // Add like to the state
-        const newLike = state.likes.addLike(
-            state.asteroid.id,
+        // Add like to the state and db
+
+            state.likes.addLike(
+            currentID,
             state.asteroid.name,
             state.asteroid.hazardous        );
-        // Toggle the like button
-        likesView.toggleLikeBtn(true);
+            likesView.toggleLikeBtn(true);
 
-        // Add like to UI list
-        likesView.renderLike(newLike);
+            // state.likes.readStorage();
+            state.likes.likes.forEach(like => likesView.renderLike(like));
 
-        // User HAS liked current recipe
+           // Toggle like menu button
+           likesView.toggleLikeMenu(state.likes.getNumLikes());
+           console.log(state.likes);
+
     }
     else {
         // Remove like from the state
-        //state.likes.deleteLike(currentID);
+        state.likes.deleteLike(currentID);
 
         // Toggle the like button
         likesView.toggleLikeBtn(false);
 
         // Remove like from UI list
-        //likesView.deleteLike(currentID);
+        likesView.deleteLike(currentID);
+        state.likes.readStorage();
     }
     likesView.toggleLikeMenu(state.likes.getNumLikes());
     // console.log(state.likes.getNumLikes());
@@ -134,7 +135,7 @@ window.addEventListener('load', async() => {
     state.likes = new Likes();
      // Restore likes
      state.likes.readStorage();
-     console.log(state.likes);
+     //console.log(state.likes);
 
 
     // Toggle like menu button
@@ -174,7 +175,7 @@ elements.asteroidClosePages.addEventListener('click', e => {
 // Handling recipe button clicks
 elements.asteroid.addEventListener('click', e => {
   if (e.target.matches('.recipe__love, .recipe__love *')) {
-    console.log('Likes ctrl');
+    //console.log('Likes ctrl');
     // Like controller
        controlLike();
     }

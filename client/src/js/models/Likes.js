@@ -10,64 +10,51 @@ export default class Likes {
               const result = await axios(`http://localhost:5000`);
               const data = result.data;
               this.likes = data;
-              this.likes_id = data._id
-              this.persistData();
-              console.log(this.likes);
             }
             catch (error) {
               console.log("Error Happened " + error);
             }
-
+            this.persistData();
             
     }
  
     //Here we need to add the like to the database
     async addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
-        console.log(like);
         try {
             axios({
                 method: 'post',
                 url: 'http://localhost:5000',
                 data: like
               });
-              console.log("Item Added");
               this.getLikes();
+              this.likes.push(like);
               this.persistData();
+              console.log("Item Added");           
         } catch (error) {
                 //
         }
-        // this.likes.push(like);
         // Perist data in localStorage
-        //Here we need to write the likes to the database
-        
-        console.log(this.likes)
+        console.log(this.likes);
         return like;
     }
 
     ///Here we need to remove the like from the database
     deleteLike(id) {
+        const index = this.likes.findIndex(el => el.id === id);
+        let mongoID = this.likes.filter(e=> e.id===id);
+        let dataID = mongoID[0]._id;
         try {
             axios({
                 method: 'delete',
-                url: `http://localhost:5000/${id}`
+                url: `http://localhost:5000/${dataID}`
               });
               console.log("Item Deleted");
-              this.getLikes();
+              this.likes.splice(index, 1);
               this.persistData();
-        } catch (error) {
-                //
+        } catch (error) {            
         }
-
-
-
-
-        
-        const index = this.likes.findIndex(el => el.id === id);
-        // this.likes.splice(index, 1);
-        console.log(this.likes)
-        // Perist data in localStorage
-        this.persistData();
+        console.log(this.likes);
     }
 
     isLiked(id) {
