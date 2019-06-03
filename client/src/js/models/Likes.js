@@ -20,40 +20,48 @@ export default class Likes {
  
     //Here we need to add the like to the database
     async addLike(id, name, hazardous) {
+
+        //Add the like to the local storage
         const like = { id, name, hazardous };
+
+        //Post it to the data base
         try {
             axios({
                 method: 'post',
                 url: 'http://localhost:5000',
                 data: like
               });
-              this.getLikes();
               this.likes.push(like);
-              this.persistData();
+              this.getLikes();
               console.log("Item Added");           
         } catch (error) {
                 //
         }
         // Perist data in localStorage
+        this.persistData();
         console.log(this.likes);
         return like;
     }
 
     ///Here we need to remove the like from the database
-    deleteLike(id) {
+    async deleteLike(id) {
+        
         const index = this.likes.findIndex(el => el.id === id);
         let mongoID = this.likes.filter(e=> e.id===id);
         let dataID = mongoID[0]._id;
+        console.log(dataID);
+
         try {
             axios({
                 method: 'delete',
                 url: `http://localhost:5000/${dataID}`
               });
               console.log("Item Deleted");
-              this.likes.splice(index, 1);
-              this.persistData();
+
         } catch (error) {            
         }
+        this.likes.splice(index, 1);
+        this.persistData();
         console.log(this.likes);
     }
 

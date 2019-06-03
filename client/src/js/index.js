@@ -106,13 +106,11 @@ const controlLike = () => {
             state.asteroid.name,
             state.asteroid.hazardous        );
             likesView.toggleLikeBtn(true);
-
-            // state.likes.readStorage();
+            state.likes.readStorage();
             state.likes.likes.forEach(like => likesView.renderLike(like));
 
            // Toggle like menu button
            likesView.toggleLikeMenu(state.likes.getNumLikes());
-           console.log(state.likes);
 
     }
     else {
