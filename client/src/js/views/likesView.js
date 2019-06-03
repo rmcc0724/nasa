@@ -14,24 +14,28 @@ export const toggleLikeMenu = numLikes => {
     elements.likesMenu.style.visibility = numLikes > 0 ? 'visible' : 'hidden';
 };
 
+
+export const clearLikes = () => {
+    elements.likesList.innerHTML = "";
+}
 //Render the likes view
 export const renderLike = like => {
-console.log(like);
-    const markup = `
-        <li>
-            <a class="likes__link" href="#${like.id}">
-                <figure class="likes__fig">
-                    <img src="img/vesta_0715.jpg" alt="Asteroid">
-                </figure>
-                <div class="likes__data">
-                    <h4 class="likes__name">${like.name}</h4>
-                    <p class="likes__author">${like.hazardous}</p>
-                </div>
-            </a>
-        </li>
-    `;
-    elements.likesList.insertAdjacentHTML('beforeend', markup);
-};
+    console.log(like);
+        const markup = `
+            <li>
+                <a class="likes__link" href="#${like.id}">
+                    <figure class="likes__fig">
+                        <img src="img/vesta_0715.jpg" alt="Asteroid">
+                    </figure>
+                    <div class="likes__data">
+                        <h4 class="likes__name">${like.name}</h4>
+                        <p class="likes__author">${like.hazardous}</p>
+                    </div>
+                </a>
+            </li>
+        `;
+        elements.likesList.insertAdjacentHTML('beforeend', markup);
+    };
 
 //Remove like from the DOM
 export const deleteLike = id => {

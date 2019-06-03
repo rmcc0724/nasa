@@ -89,43 +89,39 @@ const controlAsteroid = async() => {
  * LIKE CONTROLLER
  */
 
-const controlLike = () => {
+const controlLike = async() => {
     /////////////////////////////////////////
     console.log(`Likes ctrl fired `);
-
     if (!state.likes) state.likes = new Likes();
     
     const currentID = state.asteroid.id;
 
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
-        // Add like to the state and db
 
-            state.likes.addLike(
+        // Add like to the state and db and wait till done before moving on
+            await state.likes.addLike(
             currentID,
             state.asteroid.name,
-            state.asteroid.hazardous        );
-            likesView.toggleLikeBtn(true);
+            state.asteroid.hazardous        
+            );
             state.likes.readStorage();
-            state.likes.likes.forEach(like => likesView.renderLike(like));
 
-           // Toggle like menu button
-           likesView.toggleLikeMenu(state.likes.getNumLikes());
-
+            likesView.toggleLikeBtn(true);
+            // state.likes.likes.forEach(like => likesView.renderLike(like));
     }
     else {
-        // Remove like from the state
-        state.likes.deleteLike(currentID);
+        //Remove like from the state
+        await state.likes.deleteLike(currentID);
 
         // Toggle the like button
         likesView.toggleLikeBtn(false);
 
-        // Remove like from UI list
-        likesView.deleteLike(currentID);
-        state.likes.readStorage();
     }
+    likesView.clearLikes();
     likesView.toggleLikeMenu(state.likes.getNumLikes());
-    // console.log(state.likes.getNumLikes());
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+    console.log("End of like ctrl");
 };
 
 window.addEventListener('load', async() => {
@@ -133,12 +129,11 @@ window.addEventListener('load', async() => {
     state.likes = new Likes();
      // Restore likes
      state.likes.readStorage();
-     //console.log(state.likes);
-
 
     // Toggle like menu button
     likesView.toggleLikeMenu(state.likes.getNumLikes());
 
+    console.log(state.likes.getNumLikes());
     // Render the existing likes
     state.likes.likes.forEach(like => likesView.renderLike(like));
 });
