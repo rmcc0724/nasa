@@ -3,29 +3,43 @@
 //Bodyparser for the main app
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const app = express();
-const cors = require('cors');
+const path = require('path');
+const config = require('config');
 const likes = require('./routes/apis/likes');
-app.use(cors());
-//Body parser middleware
-app.use(bodyParser.json());
-//DB config gets the URL from  keys.js for our mongo DB
-const db = require('./config/keys').mongoURI;
 
-//Connect to Mongo
+
+const app = express();
+
+// Bodyparser Middleware
+app.use(express.json());
+
+// DB Config
+const db = config.get('mongoURI');
+
+// Connect to Mongo
 mongoose
-//Connect to the database
-    .connect(db, { useNewUrlParser: true })
-//IF the connection is successful log the message below
-    .then(() => console.log("MongoDB connected"))
-//IF there's an error log the error message
-    .catch(err=> console.log('Errors: ' + err));
+  .connect(db, { 
+    useNewUrlParser: true,
+    useCreateIndex: true
+  }) // Adding new mongo url parser
+  .then(() => console.log('MongoDB Connected...'))
+  .catch(err => console.log(err));
 
-//Anything going to '/' will go to the items variable
-    app.use('/', likes);
+// Use Routes
+app.use('/api/items', require('./routes/api/items'));
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
 
-//Set the server port to 5000
-    const port = process.env.PORT || 5000;
-//Tell the server to start on port 5000
-    app.listen(port, () => console.log(`Server has started on port ${port}`));
+// Serve static assets if in production
+// if (process.env.NODE_ENV === 'production') {
+//     // Set static folder
+//     app.use(express.static('client/build'));
+  
+//     app.get('*', (req, res) => {
+//       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+//     });
+//   }
+  
+  const port = process.env.PORT || 5000;
+  
+  app.listen(port, () => console.log(`Server started on port ${port}`));

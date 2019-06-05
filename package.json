@@ -21,13 +21,18 @@
   },
   "homepage": "https://github.com/rmcc0724/nasa#readme",
   "devDependencies": {
-    "nodemon": "^1.19.1",
     "body-parser": "^1.19.0",
     "concurrently": "^4.1.0",
     "express": "^4.17.1",
-    "mongoose": "^5.5.11"
+    "mongoose": "^5.5.13",
+    "nodemon": "^1.19.1"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^3.6.0",
+    "config": "^3.0.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.5.0",
     "cors": "^2.8.5",
     "request": "^2.88.0"
   }

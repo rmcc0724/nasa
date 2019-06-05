@@ -31,15 +31,10 @@ export default class Likes {
             await this.getLikes();
             console.log("Item Added");           
         } catch (error) {
-                //
         }
-        
-        // console.log("Here" + this.likes.length);
     }
 
     async deleteLike(id) {
-        
-
         let mongoID = this.likes.filter(e=> e.id===id);
         let dataID = mongoID[0]._id;
 
@@ -52,8 +47,7 @@ export default class Likes {
               console.log("Item Deleted");
         } catch (error) {    
             
-        }
-        // this.persistData();                
+        }    
     }
 
     isLiked(id) {
@@ -70,8 +64,8 @@ export default class Likes {
 
     persistData() {
         localStorage.setItem('likes', JSON.stringify(this.likes));
-        console.log("persist " + this.likes.length);
-        console.log("Data Persisted");
+        // console.log("persist " + this.likes.length);
+        // console.log("Data Persisted");
     }
 
     readStorage() {
