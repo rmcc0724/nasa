@@ -4,7 +4,7 @@ const Like = require("../../models/Like");
 const auth = require('../../middleware/auth');
 
 //This gets the likes from the database and sorts them in desc order
-router.get('/', (req, res) => {
+router.get('/api/likes', (req, res) => {
   console.log("Getting Likes");
   Like.find()
     .sort({ date: -1 })
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     //Use console.log(likes) to see what data returns in the terminal
 });
 
-router.post('/', auth, (req, res) => {
+router.post('/', (req, res) => {
   const newLike = new Like({
     id: req.body.id,
     name: req.body.name,
@@ -21,7 +21,7 @@ router.post('/', auth, (req, res) => {
   newLike.save().then(like => res.json(like));
 });
 
-router.delete('/:id', auth, (req, res) => {
+router.delete('/:id', (req, res) => {
     Like.findById(req.params.id).then(like =>
       like.remove().then(() => res.json({ success: true }))
   )

@@ -7,7 +7,7 @@ export default class Authenticated {
         this.user = null
     }
 
-    loadUser = () => getState => {
+    async loadUser(getState) {
         // User loading
         try {
             const result = await axios(`http://localhost:5000/api/auth/user`, tokenConfig(getState));
@@ -23,7 +23,7 @@ export default class Authenticated {
 
     // Register User
 
-    register = ({ name, email, password }) =>  {
+    async register({ name, email, password }) {
         // Headers
         const config = {
           headers: {
@@ -45,40 +45,32 @@ export default class Authenticated {
             }
         console.log("User Registration Done");
       };
-      
 
-      login = ({ email, password }) => {
-        // Headers
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
+
+    async login({ email, password }){
+    // Headers
+    const config = {
+        headers: {
+        'Content-Type': 'application/json'
+        }
+    };
       
         // Request body
         const body = JSON.stringify({ email, password });
-      
-        axios
-          .post('/api/auth', body, config)
-          .then(res =>
-            dispatch({
-              type: LOGIN_SUCCESS,
-              payload: res.data
-            })
-          )
-          .catch(err => {
-            dispatch(
-              returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
-            );
-            dispatch({
-              type: LOGIN_FAIL
-            });
-          });
+            try {
+                const result = await axios.post(`http://localhost:5000/api/auth`, body, config);
+                this.token = result.data.token;
+                console.log("Log In Success!!");
+                localStorage.setItem('token', JSON.stringify(this.token));
+                }
+            catch (error) {
+                console.log("Log In Failed " + error);
+            }
       };
 
 
     
-    logout = () => {
+    async logout() {
         localStorage.removeItem('token');
         this.token = null,
         this.user = null,
@@ -98,8 +90,8 @@ export default class Authenticated {
     }
 
     // Setup config/headers and token
-    tokenConfig = getState => {
-        // Get token from localstorage
+    tokenConfig(getState) {
+        // Get token from localStorage
         const token = getState().auth.token;
     
         // Headers
