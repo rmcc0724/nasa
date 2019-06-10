@@ -73,3 +73,4 @@ export default class Likes {
         if (storage) this.likes = storage;
     }
 }
+  
