@@ -4,7 +4,7 @@ const Like = require("../../models/Like");
 const auth = require('../../middleware/auth');
 
 //This gets the likes from the database and sorts them in desc order
-router.get('/api/likes', (req, res) => {
+router.get('/', (req, res) => {
   console.log("Getting Likes");
   Like.find()
     .sort({ date: -1 })

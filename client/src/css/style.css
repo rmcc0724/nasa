@@ -9,6 +9,10 @@
   box-sizing: inherit;
 }
 
+/* div#log_in, div#log_out {
+    display: none !important;
+} */
+
 html {
   box-sizing: border-box;
   font-size: 62.5%;

@@ -2,11 +2,11 @@
 import Search from './models/Search';
 import Asteroid from './models/Asteroid';
 import Likes from './models/Likes';
-import Bookmarks from './models/Bookmarks';
+import Auth from './models/Auth';
 import * as searchView from './views/searchView';
 import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
-import { elements, renderLoader, clearLoader } from './views/base';
+import { elements, renderLoader, clearLoader, toggleLogInOutButton, disableButton } from './views/base';
 
 //Declare a new state variable
 const state = {};
@@ -125,22 +125,52 @@ const controlLike = async() => {
 };
 
 window.addEventListener('load', async() => {
+    state.authenticated = await new Auth();
+    disableButton(true);
 
-    state.likes = new Likes();
-     // Restore likes
-     state.likes.readStorage();
-
-    // Toggle like menu button
-    likesView.toggleLikeMenu(state.likes.getNumLikes());
-
-    console.log(state.likes.getNumLikes());
-    // Render the existing likes
-    state.likes.likes.forEach(like => likesView.renderLike(like));
+    if(state.authenticated.token) {
+        state.likes = new Likes();
+        try {
+            
+            //Try to authenticate the user with the token in local storage
+            await state.authenticated.loadUser(state.authenticated.token);
+            //Hide the logIn button and show the logOut button
+            await toggleLogInOutButton(true);
+            // Toggle like menu button
+            likesView.toggleLikeMenu(state.likes.getNumLikes());
+            // Restore likes
+            state.likes.readStorage();
+            // Render the existing likes
+            state.likes.likes.forEach(like => likesView.renderLike(like));
+        }
+        catch(err) {
+            console.log(err);
+        }
+    } else {
+        likesView.toggleLikeMenu(0);
+        console.log("Need to log in");
+        await toggleLogInOutButton(false);
+    }
+    disableButton(false);
 });
 
-
-
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlAsteroid));
+
+elements.logBtn.addEventListener('click', async e => {
+    disableButton(true);
+    console.log("LogBtn fired");
+    if(!state.authenticated.token) {
+        console.log("Logging In");
+        await state.authenticated.login({ email: "reid2@gmail.com", password: "123456"});    
+        await toggleLogInOutButton(true);
+    } else if(state.authenticated.token) {
+        console.log("Logging Out");
+        await state.authenticated.logout();
+        await toggleLogInOutButton(false);
+    }
+    disableButton(false);
+    
+});
 
 elements.searchForm.addEventListener('submit', e => {
     event.preventDefault();
@@ -165,11 +195,9 @@ elements.asteroidClosePages.addEventListener('click', e => {
     }
 });
 
-// Handling recipe button clicks
+// Handling asteroid bookmark button clicks
 elements.asteroid.addEventListener('click', e => {
   if (e.target.matches('.recipe__love, .recipe__love *')) {
-    //console.log('Likes ctrl');
-    // Like controller
        controlLike();
     }
 });

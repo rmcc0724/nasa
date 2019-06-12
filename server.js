@@ -5,12 +5,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const config = require('config');
+const cors = require('cors');
+// const likes = require('./routes/apis/likes');
 
 const app = express();
 
 // Bodyparser Middleware
 app.use(express.json());
-
+app.use(cors());
 // DB Config
 const db = config.get('mongoURI');
 
@@ -24,9 +26,9 @@ mongoose
   .catch(err => console.log(err));
 
 // Use Routes
-app.use('/api/likes', require('./routes/api/likes'));
-app.use('/api/users', require('./routes/api/users'));
-app.use('/api/auth', require('./routes/api/auth'));
+app.use('/', require('./routes/apis/likes'));
+app.use('/api/users', require('./routes/apis/users'));
+app.use('/api/auth', require('./routes/apis/auth'));
 
 // Serve static assets if in production
 // if (process.env.NODE_ENV === 'production') {

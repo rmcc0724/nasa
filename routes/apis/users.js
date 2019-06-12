@@ -12,6 +12,7 @@ const User = require('../../models/User');
 // @desc    Register new user
 // @access  Public
 router.post('/', (req, res) => {
+  console.log("Register Fired");
   const { name, email, password } = req.body;
 
   // Simple validation

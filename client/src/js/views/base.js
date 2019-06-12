@@ -13,7 +13,8 @@ export const elements = {
     asteroidCloseList: document.querySelector('.close__data-list'),
     asteroidClosePages: document.querySelector('.close__data-pages'),
     introText: document.querySelector('.text-intro'),
-    likedHeader: document.querySelector('.header__likes')
+    likedHeader: document.querySelector('.header__likes'),
+    logBtn: document.querySelector('#log_btn button')
 };
 
 //Create a variable loader and assign a string with the same name to it.
@@ -43,3 +44,19 @@ export const clearLoader = () => {
     const loader = document.querySelector(`.${elementStrings.loader}`);
     if (loader) loader.parentElement.removeChild(loader);
 };
+
+export const toggleLogInOutButton = (state) => {
+    if(state) {
+        elements.logBtn.innerHTML = 'LOG OUT';
+    } else {
+        elements.logBtn.innerHTML = 'LOG IN';
+    }
+}
+
+export const disableButton = (state) => {
+    if(state) {
+        elements.logBtn.disabled = true;
+    } else {
+        elements.logBtn.disabled = false;
+    }
+}
