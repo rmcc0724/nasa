@@ -2,22 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="img/nasa_logo.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#datepicker").datepicker();
-        });
-    </script>
-    <title>Nasa | Search asteroids by date</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">        
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700" rel="stylesheet">
+        <link rel="shortcut icon" href="img/nasa_logo.png" type="image/x-icon">
+        <link rel="stylesheet" href="css/style.css">
+        <title>Nasa | Search asteroids by date</title>
 </head>
 
 <body>
@@ -36,6 +29,9 @@
             <div id="log_btn">
                 <button class="btn btn-secondary">LOG IN</button>
             </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#elegantModalForm">
+                    Launch demo modal
+            </button>
 
             <div class="likes">
                 <div class="likes__field">
@@ -48,7 +44,52 @@
                     </ul>
                 </div>
             </div>
-        </header>
+
+            <!-- Modal -->
+<div class="modal fade" id="elegantModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <!--Content-->
+  <div class="modal-content form-elegant">
+    <!--Header-->
+    <div class="modal-header text-center">
+      <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel"><strong>Sign in</strong></h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--Body-->
+    <div class="modal-body mx-4">
+      <!--Body-->
+      <div class="md-form mb-5">
+        <input type="email" id="Form-email1" class="form-control validate">
+        <label data-error="wrong" data-success="right" for="Form-email1">Your email</label>
+      </div>
+
+      <div class="md-form pb-3">
+        <input type="password" id="Form-pass1" class="form-control validate">
+        <label data-error="wrong" data-success="right" for="Form-pass1">Your password</label>
+        <p class="font-small blue-text d-flex justify-content-end">Forgot <a href="#" class="blue-text ml-1">
+            Password?</a></p>
+      </div>
+
+      <div class="text-center mb-3">
+        <button type="button" class="btn blue-gradient btn-block btn-rounded z-depth-1a">Sign in</button>
+      </div>
+    </div>
+    <!--Footer-->
+    <div class="modal-footer mx-5 pt-3 mb-1">
+      <p class="font-small grey-text d-flex justify-content-end">Not a member? <a href="#" class="blue-text ml-1">
+          Sign Up</a></p>
+    </div>
+  </div>
+  <!--/.Content-->
+</div>
+</div>
+<!-- Modal -->
+
+      
+</header>
 
 
         <div class="results">
@@ -76,8 +117,27 @@
         </div>
     </div>
     </div>
-    <script src="https://use.fontawesome.com/fe977770cf.js"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <script src="https://use.fontawesome.com/fe977770cf.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    ]
+    <script>
+            $(function () {
+                $("#datepicker").datepicker();
+            });
+        </script>
 </body>
 
 </html>
+
+
