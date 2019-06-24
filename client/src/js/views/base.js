@@ -14,14 +14,16 @@ export const elements = {
     asteroidClosePages: document.querySelector('.close__data-pages'),
     introText: document.querySelector('.text-intro'),
     likedHeader: document.querySelector('.header__likes'),
-    logBtn: document.querySelector('#log_btn button')
+    logBtn: document.querySelector('#log_btn'),
+    email: document.querySelector('#email'),
+    password: document.querySelector('#password'),
+    signIn: document.querySelector('#signIn')
 };
 
 //Create a variable loader and assign a string with the same name to it.
 export const elementStrings = {
     loader: 'loader'
 };
-
 
 //Create a variable renderLoader and use the variable elementStrings.loader as the class name in the div
 //This will render when certain conditions are true 
@@ -33,11 +35,9 @@ export const renderLoader = parent => {
             </svg>
         </div>
     `;
-
     //Insert the loader after the beginning parent html element
     parent.insertAdjacentHTML('afterbegin', loader);
 };
-
 
 //Create a variable clearLoader and use the variable elementStrings.loader as the class to clear it when the items have loaded
 export const clearLoader = () => {
@@ -47,11 +47,21 @@ export const clearLoader = () => {
 
 export const toggleLogInOutButton = (state) => {
     if(state) {
-        elements.logBtn.innerHTML = 'LOG OUT';
+        elements.logBtn.innerHTML = '<button class="btn btn-secondary">LOG OUT</button>';
     } else {
-        elements.logBtn.innerHTML = 'LOG IN';
+        elements.logBtn.innerHTML = '<button class="btn btn-secondary" data-toggle="modal" data-target="#elegantModalForm">LOG IN</button>';
     }
 }
+
+// export const removeModal = () => {
+//         elements.logBtn.removeAttribute('data-toggle');
+//         //elements.logBtn.removeAttribute('data-target');
+// }
+
+// export const addModal = () => {
+//         elements.logBtn.setAttribute('data-toggle', 'modal');
+//         //elements.logBtn.setAttribute('data-target', '#elegantModalForm');
+// }
 
 export const disableButton = (state) => {
     if(state) {
@@ -60,3 +70,16 @@ export const disableButton = (state) => {
         elements.logBtn.disabled = false;
     }
 }
+
+export const getLogInInput = () => {
+    return {
+       givePassword(){
+        return [ elements.email.value, elements.password.value ]; 
+    }
+    }
+};
+
+export const clearLogInInput = () => {
+    elements.email.value = '';
+    elements.password.value = '';
+};
