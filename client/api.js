@@ -24,4 +24,4 @@ async function getResults() {
     console.log("Error Happened " + error);
   }
 }
-getResults();
+//getResults();

@@ -2,13 +2,13 @@
 import Search from './models/Search';
 import Asteroid from './models/Asteroid';
 import Likes from './models/Likes';
-import Bookmarks from './models/Bookmarks';
 import * as searchView from './views/searchView';
 import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
 import axios from 'axios';
-var http = require('http');
+const proxy = 'https://cors-anywhere.herokuapp.com/';
+
 
 //import * as routes from '../../routes/apis/likes';
 
@@ -93,21 +93,11 @@ const controlAsteroid = async() => {
  * LIKE CONTROLLER
  */
 const controlLike = () => {
-    var url = process.argv[2];
 
-    http.get('http://localhost:5000', function(response) {
-      var finalData = "";
-    
-      response.on("data", function (data) {
-        finalData += data.toString();
-      });
-    
-      response.on("end", function() {
-        console.log(finalData.length);
-        console.log(finalData);
-      });
-    
-    });
+    const Url = `http://localhost:5000`;
+    axios.get(`${Url}`)
+    .then(data=>console.log(data))
+    .catch(err=>console.log(err));
 ///////////////////////////////////////////////////
 
 
