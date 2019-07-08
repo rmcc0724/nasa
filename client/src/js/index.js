@@ -6,11 +6,14 @@ import * as searchView from './views/searchView';
 import * as asteroidView from './views/asteroidView';
 import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
+<<<<<<< HEAD
 import axios from 'axios';
 const proxy = 'https://cors-anywhere.herokuapp.com/';
 
 
 //import * as routes from '../../routes/apis/likes';
+=======
+>>>>>>> b34cd97796ee34965424051e92580c3418518766
 
 //Declare a new state variable
 const state = {};
@@ -92,6 +95,7 @@ const controlAsteroid = async() => {
 /** 
  * LIKE CONTROLLER
  */
+<<<<<<< HEAD
 const controlLike = () => {
 
     const Url = `http://localhost:5000`;
@@ -101,48 +105,54 @@ const controlLike = () => {
 ///////////////////////////////////////////////////
 
 
+=======
+>>>>>>> b34cd97796ee34965424051e92580c3418518766
 
+const controlLike = async() => {
+    /////////////////////////////////////////
+    console.log(`Likes ctrl fired `);
     if (!state.likes) state.likes = new Likes();
+    
     const currentID = state.asteroid.id;
-    console.log(currentID)
+
     // User has NOT yet liked current recipe
     if (!state.likes.isLiked(currentID)) {
-        // Add like to the state
-        const newLike = state.likes.addLike(
+
+        // Add like to the state and db and wait till done before moving on
+            await state.likes.addLike(
             currentID,
             state.asteroid.name,
-            state.asteroid.hazardous        );
-        // Toggle the like button
-        likesView.toggleLikeBtn(true);
+            state.asteroid.hazardous        
+            );
+            state.likes.readStorage();
 
-        // Add like to UI list
-        likesView.renderLike(newLike);
-
-        // User HAS liked current recipe
+            likesView.toggleLikeBtn(true);
+            // state.likes.likes.forEach(like => likesView.renderLike(like));
     }
     else {
-        // Remove like from the state
-        state.likes.deleteLike(currentID);
+        //Remove like from the state
+        await state.likes.deleteLike(currentID);
 
         // Toggle the like button
         likesView.toggleLikeBtn(false);
 
-        // Remove like from UI list
-        likesView.deleteLike(currentID);
     }
+    likesView.clearLikes();
     likesView.toggleLikeMenu(state.likes.getNumLikes());
-    console.log(state.likes.getNumLikes());
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+    console.log("End of like ctrl");
 };
 
-window.addEventListener('load', () => {
-    state.likes = new Likes();
+window.addEventListener('load', async() => {
 
-    // Restore likes
-    state.likes.readDataBase();
+    state.likes = new Likes();
+     // Restore likes
+     state.likes.readStorage();
 
     // Toggle like menu button
     likesView.toggleLikeMenu(state.likes.getNumLikes());
 
+    console.log(state.likes.getNumLikes());
     // Render the existing likes
     state.likes.likes.forEach(like => likesView.renderLike(like));
 });
@@ -177,7 +187,7 @@ elements.asteroidClosePages.addEventListener('click', e => {
 // Handling recipe button clicks
 elements.asteroid.addEventListener('click', e => {
   if (e.target.matches('.recipe__love, .recipe__love *')) {
-    console.log('Likes ctrl');
+    //console.log('Likes ctrl');
     // Like controller
        controlLike();
     }

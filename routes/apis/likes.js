@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const newLike = new Like({
-    // id: req.body.id,
+    id: req.body.id,
     name: req.body.name,
     hazardous: req.body.hazardous
   });

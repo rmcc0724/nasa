@@ -1,27 +1,59 @@
+import axios from 'axios';
+
 export default class Likes {
     constructor() {
         this.likes = [];
+        this.getLikes();
     }
-
+    async getLikes() {
+            try {
+              const result = await axios(`http://localhost:5000`);
+              this.likes = result.data;
+              console.log("Likes gotten");
+              this.persistData();
+            }
+            catch (error) {
+              console.log("Error Happened " + error);
+            }
+            console.log("Done");
+    }
+ 
     //Here we need to add the like to the database
-    addLike(id, name, hazardous) {
+    async addLike(id, name, hazardous) {
         const like = { id, name, hazardous };
-        this.likes.push(like);
-
-        // Perist data in localStorage
-        //Here we need to write the likes to the database
-        this.persistData();
-        console.log(this.likes)
-        return like;
+        
+        try {
+            await axios({
+                method: 'post',
+                url: 'http://localhost:5000',
+                data: like
+              });
+            await this.getLikes();
+            console.log("Item Added");           
+        } catch (error) {
+                //
+        }
+        
+        // console.log("Here" + this.likes.length);
     }
 
-    ///Here we need to remove the like from the database
-    deleteLike(id) {
-        const index = this.likes.findIndex(el => el.id === id);
-        this.likes.splice(index, 1);
-        console.log(this.likes)
-        // Perist data in localStorage
-        this.persistData();
+    async deleteLike(id) {
+        
+
+        let mongoID = this.likes.filter(e=> e.id===id);
+        let dataID = mongoID[0]._id;
+
+        try {
+            await axios({
+                method: 'delete',
+                url: `http://localhost:5000/${dataID}`
+              });
+              await this.getLikes();
+              console.log("Item Deleted");
+        } catch (error) {    
+            
+        }
+        // this.persistData();                
     }
 
     isLiked(id) {
@@ -32,15 +64,18 @@ export default class Likes {
         return this.likes.length;
     }
 
-    persistData() {
-        localStorage.setItem('likes', JSON.stringify(this.likes));
+    returnLikes() {
+        return this.likes;
     }
 
-    //Here we need to get the likes from the database when the app loads
-    readDataBase() {
+    persistData() {
+        localStorage.setItem('likes', JSON.stringify(this.likes));
+        console.log("persist " + this.likes.length);
+        console.log("Data Persisted");
+    }
+
+    readStorage() {
         const storage = JSON.parse(localStorage.getItem('likes'));
-        
-        // Restoring likes from the localStorage
         if (storage) this.likes = storage;
     }
 }

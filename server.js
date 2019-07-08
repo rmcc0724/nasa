@@ -5,7 +5,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
 const likes = require('./routes/apis/likes');
+app.use(cors());
 //Body parser middleware
 app.use(bodyParser.json());
 //DB config gets the URL from  keys.js for our mongo DB
