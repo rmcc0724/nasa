@@ -1,3 +1,8 @@
+
+.log__succeed,
+.log__failed {
+  display: none;
+}
 #elegantModalForm .form-elegant .font-small {
     font-size: 0.8rem; }
 
@@ -23,6 +28,7 @@
 #elegantModalForm .form-control {
     font-size: 1.75rem !important;
 }
+
 #elegantModalForm button {
     display: block !important;
 }
