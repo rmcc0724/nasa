@@ -13,8 +13,7 @@ import {
   toggleLogInOutButton,
   disableButton,
   getLogInInput,
-  removeModal,
-  addModal
+  successModal
 } from "./views/base";
 
 //Declare a new state variable
@@ -133,6 +132,7 @@ window.addEventListener("load", async () => {
       await state.authenticated.loadUser(state.authenticated.token);
       //Hide the logIn button and show the logOut button
       await toggleLogInOutButton(true);
+      await elements.modalSuccess(true);
       // Toggle like menu button
       likesView.toggleLikeMenu(state.likes.getNumLikes());
       // Restore likes
@@ -158,13 +158,14 @@ window.addEventListener("load", async () => {
 
 elements.logBtn.addEventListener("click", async e => {
   await disableButton(true);
-  console.log("Logging Out");
+  console.log("Logging In");
   try {
     state.likes='';
     likesView.toggleLikeMenu(0);
     await state.authenticated.logout(); 
     await toggleLogInOutButton(false);
     await disableButton(false);
+    console.log("hey");
   }
   catch(e){
       console.log("Errors");
@@ -178,21 +179,17 @@ elements.signIn.addEventListener("click", async e => {
   if (!state.authenticated.token) {
     console.log("Logging In");
     state.likes = new Likes();
-    try {
-      await state.authenticated.login({
-        email: getLogInInput().givePassword()[0],
-        password: getLogInInput().givePassword()[1]
-      });
-      (await state.authenticated.token) ? toggleLogInOutButton(true) : null;
-      console.log("Signed In Likes");
 
-      await state.authenticated.loadUser(state.authenticated.token);
-      // Toggle like menu button
-      likesView.toggleLikeMenu(state.likes.getNumLikes());
-
-    } catch (e) {
-      console.log("Errors with logging in!!!");
-    }
+    await state.authenticated.login({
+      email: getLogInInput().givePassword()[0],
+      password: getLogInInput().givePassword()[1]
+    });
+    await state.authenticated.token ? (toggleLogInOutButton(true), likesView.toggleLikeMenu(state.likes.getNumLikes()), 
+                                        successModal(true)) : 
+                                      (toggleLogInOutButton(false), likesView.toggleLikeMenu(0), 
+                                        successModal(false));
+    await state.authenticated.loadUser(state.authenticated.token);
+    // Toggle like menu button    
   } else if (state.authenticated.token) {
     console.log("Logging Out");
     likesView.toggleLikeMenu(0);

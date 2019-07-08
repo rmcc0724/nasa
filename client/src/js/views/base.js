@@ -17,7 +17,10 @@ export const elements = {
     logBtn: document.querySelector('#log_btn'),
     email: document.querySelector('#email'),
     password: document.querySelector('#password'),
-    signIn: document.querySelector('#signIn')
+    modalSuccess: document.querySelector('#modalSuccess'),
+    signIn: document.querySelector('#signIn'),
+    logSucceed: document.querySelector('.log__succeed'),
+    logFailed: document.querySelector('.log__failed')
 };
 
 //Create a variable loader and assign a string with the same name to it.
@@ -53,16 +56,6 @@ export const toggleLogInOutButton = (state) => {
     }
 }
 
-// export const removeModal = () => {
-//         elements.logBtn.removeAttribute('data-toggle');
-//         //elements.logBtn.removeAttribute('data-target');
-// }
-
-// export const addModal = () => {
-//         elements.logBtn.setAttribute('data-toggle', 'modal');
-//         //elements.logBtn.setAttribute('data-target', '#elegantModalForm');
-// }
-
 export const disableButton = (state) => {
     if(state) {
         elements.logBtn.disabled = true;
@@ -83,3 +76,20 @@ export const clearLogInInput = () => {
     elements.email.value = '';
     elements.password.value = '';
 };
+
+export const successModal = async (success) => {
+    await successHelper();
+    if(success) {
+         elements.logFailed.style.display = "none";
+         elements.logSucceed.style.display = "block";
+    } else {
+         elements.logSucceed.style.display = "none";
+         elements.logFailed.style.display = "block";       
+    }
+    //successHelper();
+};
+
+const successHelper = () => {
+    elements.logFailed.style.display = "none";
+    elements.logSucceed.style.display = "none"; 
+}
