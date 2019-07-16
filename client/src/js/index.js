@@ -76,9 +76,12 @@ const controlAsteroid = async () => {
 
       // Render recipe
       clearLoader();
-      asteroidView.renderAsteroid(state.asteroid);
-      asteroidView.renderCloseResults(state.asteroid.miss_distance);
-      likesView.toggleLikeBtn(state.likes.isLiked(id));
+      await asteroidView.renderAsteroid(state.asteroid);
+      await asteroidView.renderCloseResults(state.asteroid.miss_distance);
+      if (state.authenticated.token){
+        likesView.toggleLikeBtn(state.likes.isLiked(id));
+      }
+      
     } catch (err) {
       console.log(err);
       alert("Error processing asteroid!");
@@ -93,21 +96,22 @@ const controlAsteroid = async () => {
 const controlLike = async () => {
   /////////////////////////////////////////
   console.log(`Likes ctrl fired `);
-  if (!state.likes) state.likes = new Likes();
 
-  const currentID = state.asteroid.id;
+  if(state.authenticated.token) {
+    if (!state.likes) state.likes = new Likes();
 
-  // User has NOT yet liked current recipe
-  if (!state.likes.isLiked(currentID)) {
-    // Add like to the state and db and wait till done before moving on
-    await state.likes.addLike(
-      currentID,
-      state.asteroid.name,
-      state.asteroid.hazardous
-    );
-    state.likes.readStorage();
-    likesView.toggleLikeBtn(true);
-    // state.likes.likes.forEach(like => likesView.renderLike(like));
+    const currentID = state.asteroid.id;
+
+    // User has NOT yet liked current recipe
+    if (!state.likes.isLiked(currentID)) {
+      // Add like to the state and db and wait till done before moving on
+      await state.likes.addLike(
+        currentID,
+        state.asteroid.name,
+        state.asteroid.hazardous
+      );
+      state.likes.readStorage();
+      likesView.toggleLikeBtn(true);
   } else {
     //Remove like from the state
     await state.likes.deleteLike(currentID);
@@ -119,6 +123,9 @@ const controlLike = async () => {
   likesView.toggleLikeMenu(state.likes.getNumLikes());
   state.likes.likes.forEach(like => likesView.renderLike(like));
   console.log("End of like ctrl");
+} else {
+  alert("Please log in....");
+}
 };
 
 window.addEventListener("load", async () => {
@@ -158,13 +165,13 @@ window.addEventListener("load", async () => {
 
 elements.logBtn.addEventListener("click", async e => {
   await disableButton(true);
-  console.log("Logging In");
+  console.log("Log Btn clicked");
   try {
-    state.likes='';
     likesView.toggleLikeMenu(0);
     await state.authenticated.logout(); 
     await toggleLogInOutButton(false);
     await disableButton(false);
+    likesView.toggleLikeBtn(false);
     console.log("hey");
   }
   catch(e){
@@ -174,21 +181,35 @@ elements.logBtn.addEventListener("click", async e => {
 });
 
 elements.signIn.addEventListener("click", async e => {
+  const id = window.location.hash.replace("#", "");
   disableButton(true);
   console.log("Sign In!!!");
   if (!state.authenticated.token) {
     console.log("Logging In");
-    state.likes = new Likes();
 
     await state.authenticated.login({
       email: getLogInInput().givePassword()[0],
       password: getLogInInput().givePassword()[1]
     });
-    await state.authenticated.token ? (toggleLogInOutButton(true), likesView.toggleLikeMenu(state.likes.getNumLikes()), 
-    modalSuccess(true)) : 
-                                      (toggleLogInOutButton(false), likesView.toggleLikeMenu(0), 
-                                      modalSuccess(false));
+    await state.authenticated.token ?
+    //if
+    (state.likes = new Likes(), 
+    toggleLogInOutButton(true),
+    await likesView.clearLikes(),
+    state.likes.readStorage(), 
+    state.likes.likes.forEach(like => likesView.renderLike(like)),
+    likesView.toggleLikeMenu(state.likes.getNumLikes()),
+    modalSuccess(true)):
+    //else
+    (toggleLogInOutButton(false), 
+   likesView.toggleLikeMenu(0), 
+   await modalSuccess(false));
+
+   if (state.authenticated.token){
+    likesView.toggleLikeBtn(state.likes.isLiked(id));
+  }
     await state.authenticated.loadUser(state.authenticated.token);
+    console.log("Finished Logging In");
     // Toggle like menu button    
   } else if (state.authenticated.token) {
     console.log("Logging Out");
