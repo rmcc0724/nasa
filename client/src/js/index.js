@@ -13,7 +13,7 @@ import {
   toggleLogInOutButton,
   disableButton,
   getLogInInput,
-  successModal
+  modalSuccess
 } from "./views/base";
 
 //Declare a new state variable
@@ -132,7 +132,7 @@ window.addEventListener("load", async () => {
       await state.authenticated.loadUser(state.authenticated.token);
       //Hide the logIn button and show the logOut button
       await toggleLogInOutButton(true);
-      await elements.modalSuccess(true);
+      await modalSuccess(true);
       // Toggle like menu button
       likesView.toggleLikeMenu(state.likes.getNumLikes());
       // Restore likes
@@ -185,9 +185,9 @@ elements.signIn.addEventListener("click", async e => {
       password: getLogInInput().givePassword()[1]
     });
     await state.authenticated.token ? (toggleLogInOutButton(true), likesView.toggleLikeMenu(state.likes.getNumLikes()), 
-                                        successModal(true)) : 
+    modalSuccess(true)) : 
                                       (toggleLogInOutButton(false), likesView.toggleLikeMenu(0), 
-                                        successModal(false));
+                                      modalSuccess(false));
     await state.authenticated.loadUser(state.authenticated.token);
     // Toggle like menu button    
   } else if (state.authenticated.token) {

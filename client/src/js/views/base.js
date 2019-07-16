@@ -77,7 +77,7 @@ export const clearLogInInput = () => {
     elements.password.value = '';
 };
 
-export const successModal = async (success) => {
+export const modalSuccess = async (success) => {
     await successHelper();
     if(success) {
          elements.logFailed.style.display = "none";
@@ -86,7 +86,6 @@ export const successModal = async (success) => {
          elements.logSucceed.style.display = "none";
          elements.logFailed.style.display = "block";       
     }
-    //successHelper();
 };
 
 const successHelper = () => {
