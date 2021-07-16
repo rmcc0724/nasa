@@ -2,7 +2,7 @@ const axios = require('axios');
   
 async function getLikes() {
     try {
-      const result = await axios('http://localhost:5000');
+      const result = await axios('http://localhost:5000/api/likes');
       const data = result.data;
       console.log(data);
     }

@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+console.log("API Started");
 async function getResults() {
   try {
     const result = await axios('https://api.nasa.gov/neo/rest/v1/feed?start_date=2019-03-18&api_key=xtcQn1fI4aTFJGdXDuVKxHMrUOEQIQbN6lYtSf4K');
@@ -24,4 +24,4 @@ async function getResults() {
     console.log("Error Happened " + error);
   }
 }
-//getResults();
+getResults();
