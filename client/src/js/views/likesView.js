@@ -20,7 +20,7 @@ export const clearLikes = () => {
 }
 //Render the likes view
 export const renderLike = like => {
-    console.log(like);
+    // console.log(like);
         const markup = `
             <li>
                 <a class="likes__link" href="#${like.id}">

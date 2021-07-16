@@ -7,7 +7,7 @@ export default class Likes {
     }
     async getLikes() {
             try {
-              const result = await axios(`http://localhost:5000`);
+              const result = await axios(`http://localhost:5000/api/likes`);
               this.likes = result.data;
               console.log("Likes gotten");
               this.persistData();
@@ -29,7 +29,7 @@ export default class Likes {
                 data: like
               });
             await this.getLikes();
-            console.log("Item Added");           
+            // console.log("Item Added");           
         } catch (error) {
                 //
         }
@@ -70,8 +70,8 @@ export default class Likes {
 
     persistData() {
         localStorage.setItem('likes', JSON.stringify(this.likes));
-        console.log("persist " + this.likes.length);
-        console.log("Data Persisted");
+        // console.log("persist " + this.likes.length);
+        // console.log("Data Persisted");
     }
 
     readStorage() {

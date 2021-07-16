@@ -3,44 +3,41 @@ import Search from './models/Search'
 import Asteroid from './models/Asteroid'
 import Likes from './models/Likes'
 import * as searchView from './views/searchView'
-// import * as asteroidView from './views/asteroidView'
-// import * as likesView from './views/likesView'
+import * as asteroidView from './views/asteroidView'
+import * as likesView from './views/likesView'
 import { elements, renderLoader, clearLoader } from './views/base'
-import axios from 'axios'
-const proxy = 'https://cors-anywhere.herokuapp.com/'
 
 //Declare a new state variable
 const state = {}
-console.log("JS FILE LOADED");
+
 //Here we create the search controller
 const controlSearch = async() => {
+  
   //1. Get query from view
-  console.log("Control");
   const query = searchView.getInput()
-  console.log(`${query} query`);
-
+  console.log(`Query is ${query}`);
   //2. Create a Search object and add to the state
   if (query) {
-    console.log(query);
     state.search = new Search(query)
-    renderLoader(elements.searchRes)
 
     //3. Prepare UI for the results
-    searchView.clearInput()
-    searchView.clearResults()
+      searchView.clearInput();
+      searchView.clearResults();
+      // renderLoader(elements.searchRes);
 
-    try {
-      // 4) Search for asteroids
-      await state.search.getResults()
+    //   try {
+    //   // 4) Search for asteroids
+    //   await state.search.getResults()
 
-      // 5) Render results on UI
-      clearLoader()
-      searchView.renderResults(state.search.result)
-    } catch (err) {
-      alert('Something wrong with the search...')
-      clearLoader()
-    }
-  } else {
+    //   // 5) Render results on UI
+    //   clearLoader()
+    //   searchView.renderResults(state.search.result)
+    // } catch (err) {
+    //   alert('Something wrong with the search...')
+    //   clearLoader()
+    // }
+  } 
+  else {
     alert('Input is blank!')
   }
 }
@@ -85,16 +82,19 @@ const controlAsteroid = async () => {
   }
 }
 
+['hashchange', 'load'].forEach((event) =>
+window.addEventListener(event, controlAsteroid))
+
 /**
  * LIKE CONTROLLER
  */
-const controlLike = () => {
-  console.log("Getting the likes api.");
-  const Url = `http://localhost:5000/api/likes`
-  axios
-    .get(`${Url}`)
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err))
+// const controlLike = () => {
+//   console.log("Getting the likes api.");
+//   const Url = `http://localhost:5000/api/likes`
+//   axios
+//     .get(`${Url}`)
+//     .then((data) => console.log(data))
+//     .catch((err) => console.log(err))
   
 
   const controlLike = async () => {
@@ -104,7 +104,7 @@ const controlLike = () => {
 
     const currentID = state.asteroid.id
 
-    // User has NOT yet liked current recipe
+    // User has NOT yet liked anything yet
     if (!state.likes.isLiked(currentID)) {
       // Add like to the state and db and wait till done before moving on
       await state.likes.addLike(
@@ -143,15 +143,6 @@ const controlLike = () => {
     state.likes.likes.forEach((like) => likesView.renderLike(like))
   })
 
-  ['hashchange', 'load'].forEach((event) =>
-    window.addEventListener(event, controlAsteroid),
-  )
-
-  elements.searchForm.addEventListener('submit', (e) => {
-    event.preventDefault()
-    controlSearch()
-  })
-
   elements.searchResPages.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-inline')
     if (btn) {
@@ -178,6 +169,6 @@ const controlLike = () => {
       controlLike()
     }
   })
-}
+// }
 
-console.log("JS ended");
+// console.log("JS ended");
