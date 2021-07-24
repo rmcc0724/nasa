@@ -1,11 +1,42 @@
-import { elements } from './base';
+class SearchView {
+    _parentEl = document.querySelector('.search');
+  
+    getInput() {
+        let date = elements.datePicker.value.split('');
+
+        if (`${date}`) {
+            const query = `${date[6]}${date[7]}${date[8]}${date[9]}-${date[0]}${date[1]}-${date[3]}${date[4]}`;
+        }
+        else {
+            return false;
+        }      
+        this._clearInput();
+      return query;
+    }
+  
+    _clearInput() {
+      this._parentEl.querySelector('.search__field').value = '';
+    }
+  
+    addHandlerSearch(handler) {
+      this._parentEl.addEventListener('submit', function (e) {
+        e.preventDefault();
+        handler();
+      });
+    }
+  }
+  
+  export default new SearchView();
+  
+  
+  
+  import { elements } from './base';
 
 export const getInput = () => {
     let date = elements.datePicker.value.split('');
 
     if (`${date}`) {
         return `${date[6]}${date[7]}${date[8]}${date[9]}-${date[0]}${date[1]}-${date[3]}${date[4]}`;
-        // return true;
     }
     else {
         return false;
@@ -22,11 +53,19 @@ export const clearResults = () => {
 };
 
 export const highlightSelected = id => {
+    console.log(`Firing highlightSelected`);
     const resultsArr = Array.from(document.querySelectorAll('.results__link'));
     resultsArr.forEach(el => {
         el.classList.remove('results__link--active');
     });
-    document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
+    // console.log(`Results Array is ${resultsArr  }`);
+
+    try{
+        document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
+    }
+    catch(e){
+        console.log('Favorite was selected, error is expected.');
+    }
 };
 
 export const limitAsteroidTitle = (title, limit = 17) => {

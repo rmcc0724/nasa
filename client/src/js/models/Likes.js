@@ -25,7 +25,7 @@ export default class Likes {
         try {
             await axios({
                 method: 'post',
-                url: 'http://localhost:5000',
+                url: 'http://localhost:5000/api/likes',
                 data: like
               });
             await this.getLikes();
@@ -46,7 +46,7 @@ export default class Likes {
         try {
             await axios({
                 method: 'delete',
-                url: `http://localhost:5000/${dataID}`
+                url: `http://localhost:5000/api/likes/${dataID}`
               });
               await this.getLikes();
               console.log("Item Deleted");

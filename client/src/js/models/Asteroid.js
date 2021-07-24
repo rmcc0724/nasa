@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { key, proxy } from '../config';
-
 export default class Asteroid {
     constructor(id) {
         this.id = id;
     }
-
     async getAsteroid() {
+        console.log(`Get Astroid`);
         try {
             const res = await axios(`${proxy}https://api.nasa.gov/neo/rest/v1/neo/${this.id}?api_key=${key}`);
             this.name = res.data.name;
@@ -19,7 +18,4 @@ export default class Asteroid {
             alert('Something went wrong :(');
         }
     }
-
-
-
 }

@@ -3,6 +3,7 @@ import { elements } from "./base";
 export const clearAsteroid = () => {
   elements.introText.style.display = "none";
   elements.asteroidView.innerHTML = "";
+  clearCloseData();
 };
 
 export const clearCloseData = () => {
