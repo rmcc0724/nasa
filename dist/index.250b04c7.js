@@ -429,7 +429,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"3miIZ":[function(require,module,exports) {
 var _modelJs = require('./model.js');
-var _configJs = require('./config.js');
+require('./config.js');
 var _viewsRecipeViewJs = require('./views/recipeView.js');
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 var _viewsRecipeViewJsDefault = _parcelHelpers.interopDefault(_viewsRecipeViewJs);
@@ -501,30 +501,6 @@ const controlAddBookmark = function () {
 const controlBookmarks = function () {
   _viewsBookmarksViewJsDefault.default.render(_modelJs.state.bookmarks);
 };
-const controlAddRecipe = async function (newRecipe) {
-  try {
-    // Show loading spinner
-    addRecipeView.renderSpinner();
-    // Upload the new recipe data
-    await _modelJs.uploadRecipe(newRecipe);
-    console.log(_modelJs.state.recipe);
-    // Render recipe
-    _viewsRecipeViewJsDefault.default.render(_modelJs.state.recipe);
-    // Success message
-    addRecipeView.renderMessage();
-    // Render bookmark view
-    _viewsBookmarksViewJsDefault.default.render(_modelJs.state.bookmarks);
-    // Change ID in URL
-    window.history.pushState(null, '', `#${_modelJs.state.recipe.id}`);
-    // Close form window
-    setTimeout(function () {
-      addRecipeView.toggleWindow();
-    }, _configJs.MODAL_CLOSE_SEC * 1000);
-  } catch (err) {
-    console.error('💥', err);
-    addRecipeView.renderError(err.message);
-  }
-};
 const init = function () {
   _viewsBookmarksViewJsDefault.default.addHandlerRender(controlBookmarks);
   _viewsRecipeViewJsDefault.default.addHandlerRender(controlRecipes);
@@ -532,7 +508,6 @@ const init = function () {
   _viewsRecipeViewJsDefault.default.addHandlerAddBookmark(controlAddBookmark);
   _viewsSearchViewJsDefault.default.addHandlerSearch(controlSearchResults);
   _viewsPaginationViewJsDefault.default.addHandlerClick(controlPagination);
-  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 init();
 
