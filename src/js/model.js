@@ -1,10 +1,10 @@
 import { async } from 'regenerator-runtime';
-import { API_URL, RES_PER_PAGE, KEY } from './config.js';
+import { API_URL, RES_PER_PAGE, KEY, PROXY } from './config.js';
 // import { getJSON, sendJSON } from './helpers.js';
 import { AJAX } from './helpers.js';
 
 export const state = {
-  recipe: {},
+  asteroid: {},
   search: {
     query: '',
     results: [],
@@ -14,31 +14,31 @@ export const state = {
   bookmarks: [],
 };
 
-const createRecipeObject = function (data) {
-  const { recipe } = data.data;
+const createAsteroidObject = function (data) {
+  const { asteroid } = data.data;
   return {
-    id: recipe.id,
-    title: recipe.title,
-    publisher: recipe.publisher,
-    sourceUrl: recipe.source_url,
-    image: recipe.image_url,
-    servings: recipe.servings,
-    cookingTime: recipe.cooking_time,
-    ingredients: recipe.ingredients,
-    ...(recipe.key && { key: recipe.key }),
+    id: asteroid.id,
+    title: asteroid.title,
+    publisher: asteroid.publisher,
+    sourceUrl: asteroid.source_url,
+    image: asteroid.image_url,
+    servings: asteroid.servings,
+    cookingTime: asteroid.cooking_time,
+    ingredients: asteroid.ingredients,
+    ...(asteroid.key && { key: asteroid.key }),
   };
 };
 
-export const loadRecipe = async function (id) {
+export const loadAsteroid = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
-    state.recipe = createRecipeObject(data);
+    const data = await AJAX(`${proxy}${API_URL}${id}?api_key=${KEY}`);
+    state.asteroid = createAsteroidObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
-      state.recipe.bookmarked = true;
-    else state.recipe.bookmarked = false;
+      state.asteroid.bookmarked = true;
+    else state.asteroid.bookmarked = false;
 
-    console.log(state.recipe);
+    console.log(state.asteroid);
   } catch (err) {
     // Temp error handling
     console.error(`${err} 💥💥💥💥`);
@@ -50,10 +50,10 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
 
-    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
+    const data = await AJAX(`${PROXY}${API_URL}?start_date=${query}&end_date=${query}&api_key=${KEY}`);
     console.log(data);
 
-    state.search.results = data.data.recipes.map(rec => {
+    state.search.results = data.data.asteroids.map(rec => {
       return {
         id: rec.id,
         title: rec.title,
@@ -79,24 +79,24 @@ export const getSearchResultsPage = function (page = state.search.page) {
 };
 
 export const updateServings = function (newServings) {
-  state.recipe.ingredients.forEach(ing => {
-    ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+  state.asteroid.ingredients.forEach(ing => {
+    ing.quantity = (ing.quantity * newServings) / state.asteroid.servings;
     // newQt = oldQt * newServings / oldServings // 2 * 8 / 4 = 4
   });
 
-  state.recipe.servings = newServings;
+  state.asteroid.servings = newServings;
 };
 
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
-export const addBookmark = function (recipe) {
+export const addBookmark = function (asteroid) {
   // Add bookmark
-  state.bookmarks.push(recipe);
+  state.bookmarks.push(asteroid);
 
-  // Mark current recipe as bookmarked
-  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+  // Mark current asteroid as bookmarked
+  if (asteroid.id === state.asteroid.id) state.asteroid.bookmarked = true;
 
   persistBookmarks();
 };
@@ -106,8 +106,8 @@ export const deleteBookmark = function (id) {
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
 
-  // Mark current recipe as NOT bookmarked
-  if (id === state.recipe.id) state.recipe.bookmarked = false;
+  // Mark current asteroid as NOT bookmarked
+  if (id === state.asteroid.id) state.asteroid.bookmarked = false;
 
   persistBookmarks();
 };
@@ -123,9 +123,9 @@ const clearBookmarks = function () {
 };
 // clearBookmarks();
 
-export const uploadRecipe = async function (newRecipe) {
+export const uploadAsteroid = async function (newAsteroid) {
   try {
-    const ingredients = Object.entries(newRecipe)
+    const ingredients = Object.entries(newAsteroid)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(el => el.trim());
@@ -140,19 +140,19 @@ export const uploadRecipe = async function (newRecipe) {
         return { quantity: quantity ? +quantity : null, unit, description };
       });
 
-    const recipe = {
-      title: newRecipe.title,
-      source_url: newRecipe.sourceUrl,
-      image_url: newRecipe.image,
-      publisher: newRecipe.publisher,
-      cooking_time: +newRecipe.cookingTime,
-      servings: +newRecipe.servings,
+    const asteroid = {
+      title: newAsteroid.title,
+      source_url: newAsteroid.sourceUrl,
+      image_url: newAsteroid.image,
+      publisher: newAsteroid.publisher,
+      cooking_time: +newAsteroid.cookingTime,
+      servings: +newAsteroid.servings,
       ingredients,
     };
 
-    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
-    state.recipe = createRecipeObject(data);
-    addBookmark(state.recipe);
+    const data = await AJAX(`${API_URL}?key=${KEY}`, asteroid);
+    state.asteroid = createAsteroidObject(data);
+    addBookmark(state.asteroid);
   } catch (err) {
     throw err;
   }

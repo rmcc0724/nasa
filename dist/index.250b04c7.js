@@ -517,8 +517,8 @@ _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "state", function () {
   return state;
 });
-_parcelHelpers.export(exports, "loadRecipe", function () {
-  return loadRecipe;
+_parcelHelpers.export(exports, "loadAsteroid", function () {
+  return loadAsteroid;
 });
 _parcelHelpers.export(exports, "loadSearchResults", function () {
   return loadSearchResults;
@@ -535,14 +535,14 @@ _parcelHelpers.export(exports, "addBookmark", function () {
 _parcelHelpers.export(exports, "deleteBookmark", function () {
   return deleteBookmark;
 });
-_parcelHelpers.export(exports, "uploadRecipe", function () {
-  return uploadRecipe;
+_parcelHelpers.export(exports, "uploadAsteroid", function () {
+  return uploadAsteroid;
 });
 require('regenerator-runtime');
 var _configJs = require('./config.js');
 var _helpersJs = require('./helpers.js');
 const state = {
-  recipe: {},
+  asteroid: {},
   search: {
     query: '',
     results: [],
@@ -551,28 +551,28 @@ const state = {
   },
   bookmarks: []
 };
-const createRecipeObject = function (data) {
-  const {recipe} = data.data;
+const createAsteroidObject = function (data) {
+  const {asteroid} = data.data;
   return {
-    id: recipe.id,
-    title: recipe.title,
-    publisher: recipe.publisher,
-    sourceUrl: recipe.source_url,
-    image: recipe.image_url,
-    servings: recipe.servings,
-    cookingTime: recipe.cooking_time,
-    ingredients: recipe.ingredients,
-    ...recipe.key && ({
-      key: recipe.key
+    id: asteroid.id,
+    title: asteroid.title,
+    publisher: asteroid.publisher,
+    sourceUrl: asteroid.source_url,
+    image: asteroid.image_url,
+    servings: asteroid.servings,
+    cookingTime: asteroid.cooking_time,
+    ingredients: asteroid.ingredients,
+    ...asteroid.key && ({
+      key: asteroid.key
     })
   };
 };
-const loadRecipe = async function (id) {
+const loadAsteroid = async function (id) {
   try {
-    const data = await _helpersJs.AJAX(`${_configJs.API_URL}${id}?key=${_configJs.KEY}`);
-    state.recipe = createRecipeObject(data);
-    if (state.bookmarks.some(bookmark => bookmark.id === id)) state.recipe.bookmarked = true; else state.recipe.bookmarked = false;
-    console.log(state.recipe);
+    const data = await _helpersJs.AJAX(`${proxy}${_configJs.API_URL}${id}?api_key=${_configJs.KEY}`);
+    state.asteroid = createAsteroidObject(data);
+    if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
+    console.log(state.asteroid);
   } catch (err) {
     // Temp error handling
     console.error(`${err} 💥💥💥💥`);
@@ -582,9 +582,9 @@ const loadRecipe = async function (id) {
 const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await _helpersJs.AJAX(`${_configJs.API_URL}?search=${query}&key=${_configJs.KEY}`);
+    const data = await _helpersJs.AJAX(`${_configJs.PROXY}${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
     console.log(data);
-    state.search.results = data.data.recipes.map(rec => {
+    state.search.results = data.data.asteroids.map(rec => {
       return {
         id: rec.id,
         title: rec.title,
@@ -610,27 +610,27 @@ const getSearchResultsPage = function (page = state.search.page) {
   return state.search.results.slice(start, end);
 };
 const updateServings = function (newServings) {
-  state.recipe.ingredients.forEach(ing => {
-    ing.quantity = ing.quantity * newServings / state.recipe.servings;
+  state.asteroid.ingredients.forEach(ing => {
+    ing.quantity = ing.quantity * newServings / state.asteroid.servings;
   });
-  state.recipe.servings = newServings;
+  state.asteroid.servings = newServings;
 };
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
-const addBookmark = function (recipe) {
+const addBookmark = function (asteroid) {
   // Add bookmark
-  state.bookmarks.push(recipe);
-  // Mark current recipe as bookmarked
-  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+  state.bookmarks.push(asteroid);
+  // Mark current asteroid as bookmarked
+  if (asteroid.id === state.asteroid.id) state.asteroid.bookmarked = true;
   persistBookmarks();
 };
 const deleteBookmark = function (id) {
   // Delete bookmark
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
-  // Mark current recipe as NOT bookmarked
-  if (id === state.recipe.id) state.recipe.bookmarked = false;
+  // Mark current asteroid as NOT bookmarked
+  if (id === state.asteroid.id) state.asteroid.bookmarked = false;
   persistBookmarks();
 };
 const init = function () {
@@ -641,9 +641,9 @@ init();
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-const uploadRecipe = async function (newRecipe) {
+const uploadAsteroid = async function (newAsteroid) {
   try {
-    const ingredients = Object.entries(newRecipe).filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '').map(ing => {
+    const ingredients = Object.entries(newAsteroid).filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '').map(ing => {
       const ingArr = ing[1].split(',').map(el => el.trim());
       // const ingArr = ing[1].replaceAll(' ', '').split(',');
       if (ingArr.length !== 3) throw new Error('Wrong ingredient fromat! Please use the correct format :)');
@@ -654,18 +654,18 @@ const uploadRecipe = async function (newRecipe) {
         description
       };
     });
-    const recipe = {
-      title: newRecipe.title,
-      source_url: newRecipe.sourceUrl,
-      image_url: newRecipe.image,
-      publisher: newRecipe.publisher,
-      cooking_time: +newRecipe.cookingTime,
-      servings: +newRecipe.servings,
+    const asteroid = {
+      title: newAsteroid.title,
+      source_url: newAsteroid.sourceUrl,
+      image_url: newAsteroid.image,
+      publisher: newAsteroid.publisher,
+      cooking_time: +newAsteroid.cookingTime,
+      servings: +newAsteroid.servings,
       ingredients
     };
-    const data = await _helpersJs.AJAX(`${_configJs.API_URL}?key=${_configJs.KEY}`, recipe);
-    state.recipe = createRecipeObject(data);
-    addBookmark(state.recipe);
+    const data = await _helpersJs.AJAX(`${_configJs.API_URL}?key=${_configJs.KEY}`, asteroid);
+    state.asteroid = createAsteroidObject(data);
+    addBookmark(state.asteroid);
   } catch (err) {
     throw err;
   }
@@ -1439,17 +1439,21 @@ _parcelHelpers.export(exports, "TIMEOUT_SEC", function () {
 _parcelHelpers.export(exports, "RES_PER_PAGE", function () {
   return RES_PER_PAGE;
 });
-_parcelHelpers.export(exports, "KEY", function () {
-  return KEY;
-});
 _parcelHelpers.export(exports, "MODAL_CLOSE_SEC", function () {
   return MODAL_CLOSE_SEC;
 });
-const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
+_parcelHelpers.export(exports, "PROXY", function () {
+  return PROXY;
+});
+_parcelHelpers.export(exports, "KEY", function () {
+  return KEY;
+});
+const API_URL = 'https://api.nasa.gov/neo/rest/v1/feed';
 const TIMEOUT_SEC = 10;
 const RES_PER_PAGE = 10;
-const KEY = 'fd9998db-835f-4c53-9ecb-e19d01e1fb2e';
 const MODAL_CLOSE_SEC = 2.5;
+const PROXY = 'https://cors-anywhere.herokuapp.com/';
+const KEY = 'xtcQn1fI4aTFJGdXDuVKxHMrUOEQIQbN6lYtSf4K';
 
 },{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5gA8y":[function(require,module,exports) {
 "use strict";
@@ -1532,9 +1536,10 @@ _parcelHelpers.defineInteropFlag(exports);
 class SearchView {
   _parentEl = document.querySelector('.search');
   getQuery() {
-    const query = this._parentEl.querySelector('.search__field').value;
+    let query = this._parentEl.querySelector('.search__field').value;
+    query = query.split('');
     this._clearInput();
-    return query;
+    return `${query[0]}${query[1]}${query[2]}${query[3]}-${query[5]}${query[6]}-${query[8]}${query[9]}`;
   }
   _clearInput() {
     this._parentEl.querySelector('.search__field').value = '';
