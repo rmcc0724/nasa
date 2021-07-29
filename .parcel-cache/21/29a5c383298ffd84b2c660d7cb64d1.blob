@@ -1,0 +1,155 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "state", function () {
+  return state;
+});
+_parcelHelpers.export(exports, "loadAsteroid", function () {
+  return loadAsteroid;
+});
+_parcelHelpers.export(exports, "loadSearchResults", function () {
+  return loadSearchResults;
+});
+_parcelHelpers.export(exports, "getSearchResultsPage", function () {
+  return getSearchResultsPage;
+});
+_parcelHelpers.export(exports, "updateServings", function () {
+  return updateServings;
+});
+_parcelHelpers.export(exports, "addBookmark", function () {
+  return addBookmark;
+});
+_parcelHelpers.export(exports, "deleteBookmark", function () {
+  return deleteBookmark;
+});
+_parcelHelpers.export(exports, "uploadAsteroid", function () {
+  return uploadAsteroid;
+});
+require('regenerator-runtime');
+var _configJs = require('./config.js');
+var _helpersJs = require('./helpers.js');
+const state = {
+  asteroid: {},
+  search: {
+    query: '',
+    results: [],
+    page: 1,
+    resultsPerPage: _configJs.RES_PER_PAGE
+  },
+  bookmarks: []
+};
+const createAsteroidObject = function (data) {
+  const {asteroid} = data.data;
+  return {
+    id: asteroid.id,
+    title: asteroid.title,
+    publisher: asteroid.publisher,
+    sourceUrl: asteroid.source_url,
+    image: asteroid.image_url,
+    servings: asteroid.servings,
+    cookingTime: asteroid.cooking_time,
+    ingredients: asteroid.ingredients,
+    ...asteroid.key && ({
+      key: asteroid.key
+    })
+  };
+};
+const loadAsteroid = async function (id) {
+  try {
+    const data = await _helpersJs.AJAX(`${proxy}${_configJs.API_URL}${id}?api_key=${_configJs.KEY}`);
+    state.asteroid = createAsteroidObject(data);
+    if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
+    console.log(state.asteroid);
+  } catch (err) {
+    // Temp error handling
+    console.error(`${err} 💥💥💥💥`);
+    throw err;
+  }
+};
+const loadSearchResults = async function (query) {
+  try {
+    state.search.query = query;
+    const res = await _helpersJs.AJAX(`${_configJs.PROXY}${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
+    // console.log(res.near_earth_objects);
+    state.search.results = Object.keys(res.near_earth_objects).map(a => {
+      return {
+        id: a.id,
+        name: a.name,
+        hazardous: a.is_potentially_hazardous_asteroid
+      };
+    });
+    console.log(state.search.results);
+    state.search.page = 1;
+  } catch (err) {
+    console.error(`${err} 💥💥💥💥`);
+    throw err;
+  }
+};
+const getSearchResultsPage = function (page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage;
+  // 0
+  const end = page * state.search.resultsPerPage;
+  // 9
+  return state.search.results.slice(start, end);
+};
+const updateServings = function (newServings) {
+  state.asteroid.ingredients.forEach(ing => {
+    ing.quantity = ing.quantity * newServings / state.asteroid.servings;
+  });
+  state.asteroid.servings = newServings;
+};
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+const addBookmark = function (asteroid) {
+  // Add bookmark
+  state.bookmarks.push(asteroid);
+  // Mark current asteroid as bookmarked
+  if (asteroid.id === state.asteroid.id) state.asteroid.bookmarked = true;
+  persistBookmarks();
+};
+const deleteBookmark = function (id) {
+  // Delete bookmark
+  const index = state.bookmarks.findIndex(el => el.id === id);
+  state.bookmarks.splice(index, 1);
+  // Mark current asteroid as NOT bookmarked
+  if (id === state.asteroid.id) state.asteroid.bookmarked = false;
+  persistBookmarks();
+};
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+const uploadAsteroid = async function (newAsteroid) {
+  try {
+    const ingredients = Object.entries(newAsteroid).filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '').map(ing => {
+      const ingArr = ing[1].split(',').map(el => el.trim());
+      // const ingArr = ing[1].replaceAll(' ', '').split(',');
+      if (ingArr.length !== 3) throw new Error('Wrong ingredient fromat! Please use the correct format :)');
+      const [quantity, unit, description] = ingArr;
+      return {
+        quantity: quantity ? +quantity : null,
+        unit,
+        description
+      };
+    });
+    const asteroid = {
+      title: newAsteroid.title,
+      source_url: newAsteroid.sourceUrl,
+      image_url: newAsteroid.image,
+      publisher: newAsteroid.publisher,
+      cooking_time: +newAsteroid.cookingTime,
+      servings: +newAsteroid.servings,
+      ingredients
+    };
+    const data = await _helpersJs.AJAX(`${_configJs.API_URL}?key=${_configJs.KEY}`, asteroid);
+    state.asteroid = createAsteroidObject(data);
+    addBookmark(state.asteroid);
+  } catch (err) {
+    throw err;
+  }
+};

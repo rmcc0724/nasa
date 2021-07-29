@@ -582,19 +582,18 @@ const loadAsteroid = async function (id) {
 const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await _helpersJs.AJAX(`${_configJs.PROXY}${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
-    console.log(data);
-    state.search.results = data.data.asteroids.map(rec => {
-      return {
-        id: rec.id,
-        title: rec.title,
-        publisher: rec.publisher,
-        image: rec.image_url,
-        ...rec.key && ({
-          key: rec.key
-        })
-      };
+    const res = await _helpersJs.AJAX(`${_configJs.PROXY}${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
+    const data = res.near_earth_objects;
+    Object.keys(data).map(a => {
+      data[a].forEach(e => {
+        state.search.results.push({
+          id: e.id,
+          name: e.name,
+          hazardous: e.is_potentially_hazardous_asteroid
+        });
+      });
     });
+    console.log(state.search.results);
     state.search.page = 1;
   } catch (err) {
     console.error(`${err} 💥💥💥💥`);
