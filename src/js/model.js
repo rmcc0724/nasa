@@ -55,14 +55,17 @@ export const loadSearchResults = async function (query) {
     )
     const data = res.near_earth_objects
 
+    let resArray = []
     Object.keys(data).map((a) => {
-      data[a].forEach((e) => {
-        state.search.results.push({
-          id: e.id,
-          name: e.name,
-          hazardous: e.is_potentially_hazardous_asteroid,
-        })
-      })
+      return resArray.push(data[a]);
+    });
+
+    state.search.results = resArray[0].map((e) => {
+      return {
+        id: e.id,
+        name: e.name,
+        hazardous: e.is_potentially_hazardous_asteroid,
+      }
     })
     console.log(state.search.results)
     state.search.page = 1
