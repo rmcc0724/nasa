@@ -1,5 +1,5 @@
 import { async } from 'regenerator-runtime'
-import { API_URL, RES_PER_PAGE, KEY, PROXY } from './config.js'
+import { API_URL, RES_PER_PAGE, KEY } from './config.js'
 // import { getJSON, sendJSON } from './helpers.js';
 import { AJAX } from './helpers.js'
 
@@ -31,7 +31,7 @@ const createAsteroidObject = function (data) {
 
 export const loadAsteroid = async function (id) {
   try {
-    const data = await AJAX(`${proxy}${API_URL}${id}?api_key=${KEY}`)
+    const data = await AJAX(`${API_URL}${id}?api_key=${KEY}`)
     state.asteroid = createAsteroidObject(data)
 
     if (state.bookmarks.some((bookmark) => bookmark.id === id))
@@ -51,22 +51,19 @@ export const loadSearchResults = async function (query) {
     state.search.query = query
 
     const res = await AJAX(
-      `${PROXY}${API_URL}?start_date=${query}&end_date=${query}&api_key=${KEY}`,
+      `${API_URL}?start_date=${query}&end_date=${query}&api_key=${KEY}`,
     )
-    const data = res.near_earth_objects
 
-    let resArray = []
-    Object.keys(data).map((a) => {
-      return resArray.push(data[a]);
-    });
+    for (var k in res.near_earth_objects) {
+      state.search.results = res.near_earth_objects[k].map((a) => {
+        return {
+          id: a.id,
+          name: a.name,
+          hazardous: a.is_potentially_hazardous_asteroid
+        }
+      })
+    }
 
-    state.search.results = resArray[0].map((e) => {
-      return {
-        id: e.id,
-        name: e.name,
-        hazardous: e.is_potentially_hazardous_asteroid,
-      }
-    })
     console.log(state.search.results)
     state.search.page = 1
   } catch (err) {
@@ -81,15 +78,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
   const start = (page - 1) * state.search.resultsPerPage // 0
   const end = page * state.search.resultsPerPage // 9
   return state.search.results.slice(start, end)
-}
-
-export const updateServings = function (newServings) {
-  state.asteroid.ingredients.forEach((ing) => {
-    ing.quantity = (ing.quantity * newServings) / state.asteroid.servings
-    // newQt = oldQt * newServings / oldServings // 2 * 8 / 4 = 4
-  })
-
-  state.asteroid.servings = newServings
 }
 
 const persistBookmarks = function () {
@@ -127,38 +115,3 @@ const clearBookmarks = function () {
   localStorage.clear('bookmarks')
 }
 // clearBookmarks();
-
-export const uploadAsteroid = async function (newAsteroid) {
-  try {
-    const ingredients = Object.entries(newAsteroid)
-      .filter((entry) => entry[0].startsWith('ingredient') && entry[1] !== '')
-      .map((ing) => {
-        const ingArr = ing[1].split(',').map((el) => el.trim())
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
-        if (ingArr.length !== 3)
-          throw new Error(
-            'Wrong ingredient fromat! Please use the correct format :)',
-          )
-
-        const [quantity, unit, description] = ingArr
-
-        return { quantity: quantity ? +quantity : null, unit, description }
-      })
-
-    const asteroid = {
-      title: newAsteroid.title,
-      source_url: newAsteroid.sourceUrl,
-      image_url: newAsteroid.image,
-      publisher: newAsteroid.publisher,
-      cooking_time: +newAsteroid.cookingTime,
-      servings: +newAsteroid.servings,
-      ingredients,
-    }
-
-    const data = await AJAX(`${API_URL}?key=${KEY}`, asteroid)
-    state.asteroid = createAsteroidObject(data)
-    addBookmark(state.asteroid)
-  } catch (err) {
-    throw err
-  }
-}

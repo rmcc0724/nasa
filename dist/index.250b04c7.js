@@ -526,17 +526,11 @@ _parcelHelpers.export(exports, "loadSearchResults", function () {
 _parcelHelpers.export(exports, "getSearchResultsPage", function () {
   return getSearchResultsPage;
 });
-_parcelHelpers.export(exports, "updateServings", function () {
-  return updateServings;
-});
 _parcelHelpers.export(exports, "addBookmark", function () {
   return addBookmark;
 });
 _parcelHelpers.export(exports, "deleteBookmark", function () {
   return deleteBookmark;
-});
-_parcelHelpers.export(exports, "uploadAsteroid", function () {
-  return uploadAsteroid;
 });
 require('regenerator-runtime');
 var _configJs = require('./config.js');
@@ -569,7 +563,7 @@ const createAsteroidObject = function (data) {
 };
 const loadAsteroid = async function (id) {
   try {
-    const data = await _helpersJs.AJAX(`${proxy}${_configJs.API_URL}${id}?api_key=${_configJs.KEY}`);
+    const data = await _helpersJs.AJAX(`${_configJs.API_URL}${id}?api_key=${_configJs.KEY}`);
     state.asteroid = createAsteroidObject(data);
     if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
     console.log(state.asteroid);
@@ -582,19 +576,16 @@ const loadAsteroid = async function (id) {
 const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const res = await _helpersJs.AJAX(`${_configJs.PROXY}${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
-    const data = res.near_earth_objects;
-    let resArray = [];
-    Object.keys(data).map(a => {
-      return resArray.push(data[a]);
-    });
-    state.search.results = resArray[0].map(e => {
-      return {
-        id: e.id,
-        name: e.name,
-        hazardous: e.is_potentially_hazardous_asteroid
-      };
-    });
+    const res = await _helpersJs.AJAX(`${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
+    for (var k in res.near_earth_objects) {
+      state.search.results = res.near_earth_objects[k].map(a => {
+        return {
+          id: a.id,
+          name: a.name,
+          hazardous: a.is_potentially_hazardous_asteroid
+        };
+      });
+    }
     console.log(state.search.results);
     state.search.page = 1;
   } catch (err) {
@@ -609,12 +600,6 @@ const getSearchResultsPage = function (page = state.search.page) {
   const end = page * state.search.resultsPerPage;
   // 9
   return state.search.results.slice(start, end);
-};
-const updateServings = function (newServings) {
-  state.asteroid.ingredients.forEach(ing => {
-    ing.quantity = ing.quantity * newServings / state.asteroid.servings;
-  });
-  state.asteroid.servings = newServings;
 };
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
@@ -641,35 +626,6 @@ const init = function () {
 init();
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
-};
-const uploadAsteroid = async function (newAsteroid) {
-  try {
-    const ingredients = Object.entries(newAsteroid).filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '').map(ing => {
-      const ingArr = ing[1].split(',').map(el => el.trim());
-      // const ingArr = ing[1].replaceAll(' ', '').split(',');
-      if (ingArr.length !== 3) throw new Error('Wrong ingredient fromat! Please use the correct format :)');
-      const [quantity, unit, description] = ingArr;
-      return {
-        quantity: quantity ? +quantity : null,
-        unit,
-        description
-      };
-    });
-    const asteroid = {
-      title: newAsteroid.title,
-      source_url: newAsteroid.sourceUrl,
-      image_url: newAsteroid.image,
-      publisher: newAsteroid.publisher,
-      cooking_time: +newAsteroid.cookingTime,
-      servings: +newAsteroid.servings,
-      ingredients
-    };
-    const data = await _helpersJs.AJAX(`${_configJs.API_URL}?key=${_configJs.KEY}`, asteroid);
-    state.asteroid = createAsteroidObject(data);
-    addBookmark(state.asteroid);
-  } catch (err) {
-    throw err;
-  }
 };
 
 },{"regenerator-runtime":"62Qib","./config.js":"6pr2F","./helpers.js":"581KF","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"62Qib":[function(require,module,exports) {
@@ -1443,9 +1399,6 @@ _parcelHelpers.export(exports, "RES_PER_PAGE", function () {
 _parcelHelpers.export(exports, "MODAL_CLOSE_SEC", function () {
   return MODAL_CLOSE_SEC;
 });
-_parcelHelpers.export(exports, "PROXY", function () {
-  return PROXY;
-});
 _parcelHelpers.export(exports, "KEY", function () {
   return KEY;
 });
@@ -1453,7 +1406,6 @@ const API_URL = 'https://api.nasa.gov/neo/rest/v1/feed';
 const TIMEOUT_SEC = 10;
 const RES_PER_PAGE = 10;
 const MODAL_CLOSE_SEC = 2.5;
-const PROXY = 'https://cors-anywhere.herokuapp.com/';
 const KEY = 'xtcQn1fI4aTFJGdXDuVKxHMrUOEQIQbN6lYtSf4K';
 
 },{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5gA8y":[function(require,module,exports) {
