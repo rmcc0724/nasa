@@ -1665,9 +1665,9 @@ var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _ViewJs = require('./View.js');
 var _ViewJsDefault = _parcelHelpers.interopDefault(_ViewJs);
-var _urlImgIconsSvg = require('url:../../img/icons.svg');
-var _urlImgIconsSvgDefault = _parcelHelpers.interopDefault(_urlImgIconsSvg);
-// Parcel 2
+require('url:../../img/icons.svg');
+var _urlImgVesta_0715Jpg = require('url:../../img/vesta_0715.jpg');
+var _urlImgVesta_0715JpgDefault = _parcelHelpers.interopDefault(_urlImgVesta_0715Jpg);
 class PreviewView extends _ViewJsDefault.default {
   _parentElement = '';
   _generateMarkup() {
@@ -1676,16 +1676,11 @@ class PreviewView extends _ViewJsDefault.default {
       <li class="preview">
         <a class="preview__link ${this._data.id === id ? 'preview__link--active' : ''}" href="#${this._data.id}">
           <figure class="preview__fig">
-            <img src="${this._data.image}" alt="${this._data.title}" />
+            <img src=${_urlImgVesta_0715JpgDefault.default} alt="Asteroid" />
           </figure>
           <div class="preview__data">
-            <h4 class="preview__title">${this._data.title}</h4>
-            <p class="preview__publisher">${this._data.publisher}</p>
-            <div class="preview__user-generated ${this._data.key ? '' : 'hidden'}">
-              <svg>
-              <use href="${_urlImgIconsSvgDefault.default}#icon-user"></use>
-              </svg>
-            </div>
+            <h4 class="preview__title">NAME: ${this._data.id} ${this._data.name} </h4>
+            <p class="preview__publisher">HAZARDOUS?: ${this._data.hazardous}</p>
           </div>
         </a>
       </li>
@@ -1694,7 +1689,9 @@ class PreviewView extends _ViewJsDefault.default {
 }
 exports.default = new PreviewView();
 
-},{"./View.js":"48jhP","url:../../img/icons.svg":"3t5dV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5u5Fw":[function(require,module,exports) {
+},{"./View.js":"48jhP","url:../../img/icons.svg":"3t5dV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","url:../../img/vesta_0715.jpg":"3J8Wz"}],"3J8Wz":[function(require,module,exports) {
+module.exports = require('./bundle-url').getBundleURL() + "vesta_0715.6bdf535c.jpg"
+},{"./bundle-url":"3seVR"}],"5u5Fw":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _ViewJs = require('./View.js');
