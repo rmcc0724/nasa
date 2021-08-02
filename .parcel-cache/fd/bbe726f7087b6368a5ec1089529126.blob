@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.HASH_REF_866d94b1085c9d0786e972b680934ffe.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="/index.HASH_REF_4b4dac7bc024e44091b1469a1206e35b.css">
+    <script defer="" src="/index.HASH_REF_6315ebf922a29661e8263da0250b04c7.js"></script>
+
+    <title>forkify // Search over 1,000,000 recipes</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <img src="/nasa_logo.HASH_REF_146f75abd7aea08188c55518b4754899.png" alt="Logo" class="header__logo">
+        <form class="search">
+          <input type="date" class="search__field" placeholder="Search over 1,000,000 recipes...">
+          <button class="btn search__btn">
+            <svg class="search__icon">
+              <use href="/icons.HASH_REF_677b672340424c465b277708c4b52749.svg"></use>
+            </svg>
+            <span>Search</span>
+          </button>
+        </form>
+
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <button class="nav__btn nav__btn--bookmarks">
+                <svg class="nav__icon">
+                  <use href="/icons.HASH_REF_677b672340424c465b277708c4b52749.svg"></use>
+                </svg>
+                <span>Bookmarks</span>
+              </button>
+              <div class="bookmarks">
+                <ul class="bookmarks__list">
+                  <div class="message">
+                    <div>
+                      <svg>
+                        <use href="/icons.HASH_REF_677b672340424c465b277708c4b52749.svg"></use>
+                      </svg>
+                    </div>
+                    <p>
+                      No bookmarks yet. Find a nice recipe and bookmark it :)
+                    </p>
+                  </div>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <div class="search-results">
+        <ul class="results">
+        </ul>
+
+        <div class="pagination">
+
+        </div>
+
+
+      </div>
+
+      <div class="recipe">
+        <div class="message">
+          <div>
+            <svg>
+              <use href="/icons.HASH_REF_677b672340424c465b277708c4b52749.svg"></use>
+            </svg>
+          </div>
+          <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

@@ -444,7 +444,7 @@ var _viewsBookmarksViewJsDefault = _parcelHelpers.interopDefault(_viewsBookmarks
 require('core-js/stable');
 require('regenerator-runtime/runtime');
 require('regenerator-runtime');
-const controlRecipes = async function () {
+const controlAsteroid = async function () {
   try {
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -454,9 +454,9 @@ const controlRecipes = async function () {
     // 1) Updating bookmarks view
     _viewsBookmarksViewJsDefault.default.update(_modelJs.state.bookmarks);
     // 2) Loading recipe
-    await _modelJs.loadRecipe(id);
+    await _modelJs.loadAsteroid(id);
     // 3) Rendering recipe
-    _viewsRecipeViewJsDefault.default.render(_modelJs.state.recipe);
+    asteroidView.render(_modelJs.state.asteroid);
   } catch (err) {
     _viewsRecipeViewJsDefault.default.renderError();
     console.error(err);
@@ -484,12 +484,6 @@ const controlPagination = function (goToPage) {
   // 2) Render NEW pagination buttons
   _viewsPaginationViewJsDefault.default.render(_modelJs.state.search);
 };
-const controlServings = function (newServings) {
-  // Update the recipe servings (in state)
-  _modelJs.updateServings(newServings);
-  // Update the recipe view
-  _viewsRecipeViewJsDefault.default.update(_modelJs.state.recipe);
-};
 const controlAddBookmark = function () {
   // 1) Add/remove bookmark
   if (!_modelJs.state.recipe.bookmarked) _modelJs.addBookmark(_modelJs.state.recipe); else _modelJs.deleteBookmark(_modelJs.state.recipe.id);
@@ -503,8 +497,7 @@ const controlBookmarks = function () {
 };
 const init = function () {
   _viewsBookmarksViewJsDefault.default.addHandlerRender(controlBookmarks);
-  _viewsRecipeViewJsDefault.default.addHandlerRender(controlRecipes);
-  _viewsRecipeViewJsDefault.default.addHandlerUpdateServings(controlServings);
+  _viewsRecipeViewJsDefault.default.addHandlerRender(controlAsteroid);
   _viewsRecipeViewJsDefault.default.addHandlerAddBookmark(controlAddBookmark);
   _viewsSearchViewJsDefault.default.addHandlerSearch(controlSearchResults);
   _viewsPaginationViewJsDefault.default.addHandlerClick(controlPagination);
@@ -546,37 +539,35 @@ const state = {
   bookmarks: []
 };
 const createAsteroidObject = function (data) {
-  const {asteroid} = data.data;
+  const {name, estimated_diameter, is_potentially_hazardous_asteroid, close_approach_data, id} = data;
   return {
-    id: asteroid.id,
-    title: asteroid.title,
-    publisher: asteroid.publisher,
-    sourceUrl: asteroid.source_url,
-    image: asteroid.image_url,
-    servings: asteroid.servings,
-    cookingTime: asteroid.cooking_time,
-    ingredients: asteroid.ingredients,
-    ...asteroid.key && ({
-      key: asteroid.key
+    name: name,
+    diameter: estimated_diameter.miles.estimated_diameter_max,
+    hazardous: is_potentially_hazardous_asteroid,
+    miss_distance: close_approach_data,
+    // image: asteroid.image_url,
+    ...id && ({
+      key: id
     })
   };
 };
 const loadAsteroid = async function (id) {
   try {
-    const data = await _helpersJs.AJAX(`${_configJs.API_URL}${id}?api_key=${_configJs.KEY}`);
+    const data = await _helpersJs.AJAX(`${_configJs.API_URL}neo/${id}?api_key=${_configJs.KEY}`);
     state.asteroid = createAsteroidObject(data);
+    console.log(`Create done`);
     if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
     console.log(state.asteroid);
   } catch (err) {
     // Temp error handling
-    console.error(`${err} 💥💥💥💥`);
+    console.error(`WTF ${err} 💥💥💥💥`);
     throw err;
   }
 };
 const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const res = await _helpersJs.AJAX(`${_configJs.API_URL}?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
+    const res = await _helpersJs.AJAX(`${_configJs.API_URL}feed?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
     for (var k in res.near_earth_objects) {
       state.search.results = res.near_earth_objects[k].map(a => {
         return {
@@ -599,6 +590,7 @@ const getSearchResultsPage = function (page = state.search.page) {
   // 0
   const end = page * state.search.resultsPerPage;
   // 9
+  console.log(`Start is ${start}, end is ${end}`);
   return state.search.results.slice(start, end);
 };
 const persistBookmarks = function () {
@@ -1399,13 +1391,17 @@ _parcelHelpers.export(exports, "RES_PER_PAGE", function () {
 _parcelHelpers.export(exports, "MODAL_CLOSE_SEC", function () {
   return MODAL_CLOSE_SEC;
 });
+_parcelHelpers.export(exports, "PROXY", function () {
+  return PROXY;
+});
 _parcelHelpers.export(exports, "KEY", function () {
   return KEY;
 });
-const API_URL = 'https://api.nasa.gov/neo/rest/v1/feed';
+const API_URL = 'https://api.nasa.gov/neo/rest/v1/';
 const TIMEOUT_SEC = 10;
 const RES_PER_PAGE = 10;
 const MODAL_CLOSE_SEC = 2.5;
+const PROXY = 'https://cors-anywhere.herokuapp.com/';
 const KEY = 'xtcQn1fI4aTFJGdXDuVKxHMrUOEQIQbN6lYtSf4K';
 
 },{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5gA8y":[function(require,module,exports) {
@@ -1712,6 +1708,7 @@ class PaginationView extends _ViewJsDefault.default {
   _generateMarkup() {
     const curPage = this._data.page;
     const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+    console.log(`Num of pages is ${numPages}`);
     // Page 1, and there are other pages
     if (curPage === 1 && numPages > 1) {
       return `

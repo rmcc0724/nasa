@@ -1,0 +1,110 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "state", function () {
+  return state;
+});
+_parcelHelpers.export(exports, "loadAsteroid", function () {
+  return loadAsteroid;
+});
+_parcelHelpers.export(exports, "loadSearchResults", function () {
+  return loadSearchResults;
+});
+_parcelHelpers.export(exports, "getSearchResultsPage", function () {
+  return getSearchResultsPage;
+});
+_parcelHelpers.export(exports, "addBookmark", function () {
+  return addBookmark;
+});
+_parcelHelpers.export(exports, "deleteBookmark", function () {
+  return deleteBookmark;
+});
+require('regenerator-runtime');
+var _configJs = require('./config.js');
+var _helpersJs = require('./helpers.js');
+const state = {
+  asteroid: {},
+  search: {
+    query: '',
+    results: [],
+    page: 1,
+    resultsPerPage: _configJs.RES_PER_PAGE
+  },
+  bookmarks: []
+};
+const createAsteroidObject = function (data) {
+  const {name, estimated_diameter, is_potentially_hazardous_asteroid, close_approach_data, id} = data;
+  return {
+    name: name,
+    diameter: estimated_diameter.miles.estimated_diameter_max,
+    hazardous: is_potentially_hazardous_asteroid,
+    miss_distance: close_approach_data
+  };
+};
+const loadAsteroid = async function (id) {
+  try {
+    const data = await _helpersJs.AJAX(`${_configJs.API_URL}neo/${id}?api_key=${_configJs.KEY}`);
+    state.asteroid = createAsteroidObject(data);
+    console.log(`Create done`);
+    if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
+    console.log(state.asteroid);
+  } catch (err) {
+    // Temp error handling
+    console.error(`WTF ${err} 💥💥💥💥`);
+    throw err;
+  }
+};
+const loadSearchResults = async function (query) {
+  try {
+    state.search.query = query;
+    const res = await _helpersJs.AJAX(`${_configJs.API_URL}feed?start_date=${query}&end_date=${query}&api_key=${_configJs.KEY}`);
+    for (var k in res.near_earth_objects) {
+      state.search.results = res.near_earth_objects[k].map(a => {
+        return {
+          id: a.id,
+          name: a.name,
+          hazardous: a.is_potentially_hazardous_asteroid
+        };
+      });
+    }
+    console.log(state.search.results);
+    state.search.page = 1;
+  } catch (err) {
+    console.error(`${err} 💥💥💥💥`);
+    throw err;
+  }
+};
+const getSearchResultsPage = function (page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage;
+  // 0
+  const end = page * state.search.resultsPerPage;
+  // 9
+  console.log(`Start is ${start}, end is ${end}`);
+  return state.search.results.slice(start, end);
+};
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+const addBookmark = function (asteroid) {
+  // Add bookmark
+  state.bookmarks.push(asteroid);
+  // Mark current asteroid as bookmarked
+  if (asteroid.id === state.asteroid.id) state.asteroid.bookmarked = true;
+  persistBookmarks();
+};
+const deleteBookmark = function (id) {
+  // Delete bookmark
+  const index = state.bookmarks.findIndex(el => el.id === id);
+  state.bookmarks.splice(index, 1);
+  // Mark current asteroid as NOT bookmarked
+  if (id === state.asteroid.id) state.asteroid.bookmarked = false;
+  persistBookmarks();
+};
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};

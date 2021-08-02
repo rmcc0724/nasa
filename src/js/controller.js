@@ -10,7 +10,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { async } from 'regenerator-runtime';
 
-const controlRecipes = async function () {
+const controlAsteroid = async function () {
   try {
     const id = window.location.hash.slice(1);
 
@@ -24,10 +24,10 @@ const controlRecipes = async function () {
     bookmarksView.update(model.state.bookmarks);
 
     // 2) Loading recipe
-    await model.loadRecipe(id);
+    await model.loadAsteroid(id);
 
     // 3) Rendering recipe
-    recipeView.render(model.state.recipe);
+    asteroidView.render(model.state.asteroid);
   } catch (err) {
     recipeView.renderError();
     console.error(err);
@@ -63,13 +63,6 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
-const controlServings = function (newServings) {
-  // Update the recipe servings (in state)
-  model.updateServings(newServings);
-
-  // Update the recipe view
-  recipeView.update(model.state.recipe);
-};
 
 const controlAddBookmark = function () {
   // 1) Add/remove bookmark
@@ -90,8 +83,7 @@ const controlBookmarks = function () {
 
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
-  recipeView.addHandlerRender(controlRecipes);
-  recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerRender(controlAsteroid);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);

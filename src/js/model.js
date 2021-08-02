@@ -15,24 +15,22 @@ export const state = {
 }
 
 const createAsteroidObject = function (data) {
-  const { asteroid } = data.data
+  const { name, estimated_diameter, is_potentially_hazardous_asteroid, close_approach_data, id } = data
   return {
-    id: asteroid.id,
-    title: asteroid.title,
-    publisher: asteroid.publisher,
-    sourceUrl: asteroid.source_url,
-    image: asteroid.image_url,
-    servings: asteroid.servings,
-    cookingTime: asteroid.cooking_time,
-    ingredients: asteroid.ingredients,
-    ...(asteroid.key && { key: asteroid.key }),
+    name: name,
+    diameter: estimated_diameter.miles.estimated_diameter_max,
+    hazardous: is_potentially_hazardous_asteroid,
+    miss_distance: close_approach_data,
+    // image: asteroid.image_url,
+    ...(id && { key: id }),
   }
 }
 
 export const loadAsteroid = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}${id}?api_key=${KEY}`)
+    const data = await AJAX(`${API_URL}neo/${id}?api_key=${KEY}`)
     state.asteroid = createAsteroidObject(data)
+    console.log(`Create done`);
 
     if (state.bookmarks.some((bookmark) => bookmark.id === id))
       state.asteroid.bookmarked = true
@@ -41,7 +39,7 @@ export const loadAsteroid = async function (id) {
     console.log(state.asteroid)
   } catch (err) {
     // Temp error handling
-    console.error(`${err} 💥💥💥💥`)
+    console.error(`WTF ${err} 💥💥💥💥`)
     throw err
   }
 }
@@ -51,7 +49,7 @@ export const loadSearchResults = async function (query) {
     state.search.query = query
 
     const res = await AJAX(
-      `${API_URL}?start_date=${query}&end_date=${query}&api_key=${KEY}`,
+      `${API_URL}feed?start_date=${query}&end_date=${query}&api_key=${KEY}`,
     )
 
     for (var k in res.near_earth_objects) {
@@ -74,9 +72,9 @@ export const loadSearchResults = async function (query) {
 
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page
-
   const start = (page - 1) * state.search.resultsPerPage // 0
   const end = page * state.search.resultsPerPage // 9
+  console.log(`Start is ${start}, end is ${end}`)
   return state.search.results.slice(start, end)
 }
 
