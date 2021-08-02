@@ -430,9 +430,9 @@ function hmrAcceptRun(bundle, id) {
 },{}],"3miIZ":[function(require,module,exports) {
 var _modelJs = require('./model.js');
 require('./config.js');
-var _viewsRecipeViewJs = require('./views/recipeView.js');
+var _viewsAsteroidViewJs = require('./views/asteroidView.js');
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
-var _viewsRecipeViewJsDefault = _parcelHelpers.interopDefault(_viewsRecipeViewJs);
+var _viewsAsteroidViewJsDefault = _parcelHelpers.interopDefault(_viewsAsteroidViewJs);
 var _viewsSearchViewJs = require('./views/searchView.js');
 var _viewsSearchViewJsDefault = _parcelHelpers.interopDefault(_viewsSearchViewJs);
 var _viewsResultsViewJs = require('./views/resultsView.js');
@@ -448,17 +448,18 @@ const controlAsteroid = async function () {
   try {
     const id = window.location.hash.slice(1);
     if (!id) return;
-    _viewsRecipeViewJsDefault.default.renderSpinner();
+    _viewsAsteroidViewJsDefault.default.renderSpinner();
     // 0) Update results view to mark selected search result
     _viewsResultsViewJsDefault.default.update(_modelJs.getSearchResultsPage());
     // 1) Updating bookmarks view
     _viewsBookmarksViewJsDefault.default.update(_modelJs.state.bookmarks);
-    // 2) Loading recipe
+    // 2) Loading Asteroid
     await _modelJs.loadAsteroid(id);
-    // 3) Rendering recipe
-    asteroidView.render(_modelJs.state.asteroid);
+    console.log(_modelJs.loadAsteroid(id));
+    // 3) Rendering Asteroid
+    _viewsAsteroidViewJsDefault.default.render(_modelJs.state.asteroid);
   } catch (err) {
-    _viewsRecipeViewJsDefault.default.renderError();
+    _viewsAsteroidViewJsDefault.default.renderError();
     console.error(err);
   }
 };
@@ -488,7 +489,7 @@ const controlAddBookmark = function () {
   // 1) Add/remove bookmark
   if (!_modelJs.state.recipe.bookmarked) _modelJs.addBookmark(_modelJs.state.recipe); else _modelJs.deleteBookmark(_modelJs.state.recipe.id);
   // 2) Update recipe view
-  _viewsRecipeViewJsDefault.default.update(_modelJs.state.recipe);
+  _viewsAsteroidViewJsDefault.default.update(_modelJs.state.recipe);
   // 3) Render bookmarks
   _viewsBookmarksViewJsDefault.default.render(_modelJs.state.bookmarks);
 };
@@ -497,14 +498,14 @@ const controlBookmarks = function () {
 };
 const init = function () {
   _viewsBookmarksViewJsDefault.default.addHandlerRender(controlBookmarks);
-  _viewsRecipeViewJsDefault.default.addHandlerRender(controlAsteroid);
-  _viewsRecipeViewJsDefault.default.addHandlerAddBookmark(controlAddBookmark);
+  _viewsAsteroidViewJsDefault.default.addHandlerRender(controlAsteroid);
+  _viewsAsteroidViewJsDefault.default.addHandlerAddBookmark(controlAddBookmark);
   _viewsSearchViewJsDefault.default.addHandlerSearch(controlSearchResults);
   _viewsPaginationViewJsDefault.default.addHandlerClick(controlPagination);
 };
 init();
 
-},{"./model.js":"1hp6y","./config.js":"6pr2F","./views/searchView.js":"3rYQ6","./views/resultsView.js":"17PYN","./views/paginationView.js":"5u5Fw","./views/bookmarksView.js":"2EbNZ","core-js/stable":"1PFvP","regenerator-runtime/runtime":"62Qib","regenerator-runtime":"62Qib","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","./views/recipeView.js":"9e6b9"}],"1hp6y":[function(require,module,exports) {
+},{"./model.js":"1hp6y","./config.js":"6pr2F","./views/searchView.js":"3rYQ6","./views/resultsView.js":"17PYN","./views/paginationView.js":"5u5Fw","./views/bookmarksView.js":"2EbNZ","core-js/stable":"1PFvP","regenerator-runtime/runtime":"62Qib","regenerator-runtime":"62Qib","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","./views/asteroidView.js":"4ZdHg"}],"1hp6y":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 _parcelHelpers.export(exports, "state", function () {
@@ -528,6 +529,8 @@ _parcelHelpers.export(exports, "deleteBookmark", function () {
 require('regenerator-runtime');
 var _configJs = require('./config.js');
 var _helpersJs = require('./helpers.js');
+var _urlImgVesta_0715Jpg = require('url:../img/vesta_0715.jpg');
+var _urlImgVesta_0715JpgDefault = _parcelHelpers.interopDefault(_urlImgVesta_0715Jpg);
 const state = {
   asteroid: {},
   search: {
@@ -545,7 +548,7 @@ const createAsteroidObject = function (data) {
     diameter: estimated_diameter.miles.estimated_diameter_max,
     hazardous: is_potentially_hazardous_asteroid,
     miss_distance: close_approach_data,
-    // image: asteroid.image_url,
+    image: _urlImgVesta_0715JpgDefault.default,
     ...id && ({
       key: id
     })
@@ -555,9 +558,7 @@ const loadAsteroid = async function (id) {
   try {
     const data = await _helpersJs.AJAX(`${_configJs.API_URL}neo/${id}?api_key=${_configJs.KEY}`);
     state.asteroid = createAsteroidObject(data);
-    console.log(`Create done`);
     if (state.bookmarks.some(bookmark => bookmark.id === id)) state.asteroid.bookmarked = true; else state.asteroid.bookmarked = false;
-    console.log(state.asteroid);
   } catch (err) {
     // Temp error handling
     console.error(`WTF ${err} 💥💥💥💥`);
@@ -620,7 +621,7 @@ const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
 
-},{"regenerator-runtime":"62Qib","./config.js":"6pr2F","./helpers.js":"581KF","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"62Qib":[function(require,module,exports) {
+},{"regenerator-runtime":"62Qib","./config.js":"6pr2F","./helpers.js":"581KF","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","url:../img/vesta_0715.jpg":"3J8Wz"}],"62Qib":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -1479,7 +1480,55 @@ const AJAX = async function (url, uploadData = undefined) {
   }
 };
 
-},{"regenerator-runtime":"62Qib","./config.js":"6pr2F","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"3rYQ6":[function(require,module,exports) {
+},{"regenerator-runtime":"62Qib","./config.js":"6pr2F","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"3J8Wz":[function(require,module,exports) {
+module.exports = require('./bundle-url').getBundleURL() + "vesta_0715.6bdf535c.jpg"
+},{"./bundle-url":"3seVR"}],"3seVR":[function(require,module,exports) {
+"use strict";
+
+/* globals document:readonly */
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+
+
+function getOrigin(url) {
+  let matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+
+  if (!matches) {
+    throw new Error('Origin not found');
+  }
+
+  return matches[0];
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+},{}],"3rYQ6":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 class SearchView {
@@ -1610,53 +1659,7 @@ exports.default = View;
 
 },{"url:../../img/icons.svg":"3t5dV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"3t5dV":[function(require,module,exports) {
 module.exports = require('./bundle-url').getBundleURL() + "icons.d4a14980.svg"
-},{"./bundle-url":"3seVR"}],"3seVR":[function(require,module,exports) {
-"use strict";
-
-/* globals document:readonly */
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-
-
-function getOrigin(url) {
-  let matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
-
-  if (!matches) {
-    throw new Error('Origin not found');
-  }
-
-  return matches[0];
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-},{}],"3QsRt":[function(require,module,exports) {
+},{"./bundle-url":"3seVR"}],"3QsRt":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _ViewJs = require('./View.js');
@@ -1685,9 +1688,7 @@ class PreviewView extends _ViewJsDefault.default {
 }
 exports.default = new PreviewView();
 
-},{"./View.js":"48jhP","url:../../img/icons.svg":"3t5dV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","url:../../img/vesta_0715.jpg":"3J8Wz"}],"3J8Wz":[function(require,module,exports) {
-module.exports = require('./bundle-url').getBundleURL() + "vesta_0715.6bdf535c.jpg"
-},{"./bundle-url":"3seVR"}],"5u5Fw":[function(require,module,exports) {
+},{"./View.js":"48jhP","url:../../img/icons.svg":"3t5dV","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y","url:../../img/vesta_0715.jpg":"3J8Wz"}],"5u5Fw":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _ViewJs = require('./View.js');
@@ -13461,15 +13462,14 @@ $({ target: 'URL', proto: true, enumerable: true }, {
   }
 });
 
-},{"../internals/export":"7f5VM"}],"9e6b9":[function(require,module,exports) {
+},{"../internals/export":"7f5VM"}],"4ZdHg":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
 var _ViewJs = require('./View.js');
 var _ViewJsDefault = _parcelHelpers.interopDefault(_ViewJs);
-var _urlImgIconsSvg = require('url:../../img/icons.svg');
-var _urlImgIconsSvgDefault = _parcelHelpers.interopDefault(_urlImgIconsSvg);
-var _fractional = require('fractional');
-class recipeView extends _ViewJsDefault.default {
+require('url:../../img/icons.svg');
+require('fractional');
+class asteroidView extends _ViewJsDefault.default {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _message = '';
@@ -13493,96 +13493,34 @@ class recipeView extends _ViewJsDefault.default {
   }
   _generateMarkup() {
     return `
-      <figure class="recipe__fig">
-        <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
-        <h1 class="recipe__title">
-          <span>${this._data.title}</span>
-        </h1>
-      </figure>
-
-      <div class="recipe__details">
-        <div class="recipe__info">
-          <svg class="recipe__info-icon">
-            <use href="${_urlImgIconsSvgDefault.default}#icon-clock"></use>
-          </svg>
-          <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>
-          <span class="recipe__info-text">minutes</span>
-        </div>
-        <div class="recipe__info">
-          <svg class="recipe__info-icon">
-            <use href="${_urlImgIconsSvgDefault.default}#icon-users"></use>
-          </svg>
-          <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>
-          <span class="recipe__info-text">servings</span>
-
-          <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">
-              <svg>
-                <use href="${_urlImgIconsSvgDefault.default}#icon-minus-circle"></use>
-              </svg>
-            </button>
-            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
-              <svg>
-                <use href="${_urlImgIconsSvgDefault.default}#icon-plus-circle"></use>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
-          <svg>
-            <use href="${_urlImgIconsSvgDefault.default}#icon-user"></use>
-          </svg>
-        </div>
-        <button class="btn--round btn--bookmark">
-          <svg class="">
-            <use href="${_urlImgIconsSvgDefault.default}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
-          </svg>
-        </button>
-      </div>
-
-      <div class="recipe__ingredients">
-        <h2 class="heading--2">Recipe ingredients</h2>
-        <ul class="recipe__ingredient-list">
-          ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
-      </div>
-
-      <div class="recipe__directions">
-        <h2 class="heading--2">How to cook it</h2>
-        <p class="recipe__directions-text">
-          This recipe was carefully designed and tested by
-          <span class="recipe__publisher">${this._data.publisher}</span>. Please check out
-          directions at their website.
-        </p>
-        <a
-          class="btn--small recipe__btn"
-          href="${this._data.sourceUrl}"
-          target="_blank"
-        >
-          <span>Directions</span>
-          <svg class="search__icon">
-            <use href="${_urlImgIconsSvgDefault.default}#icon-arrow-right"></use>
-          </svg>
-        </a>
-      </div>
-    `;
-  }
-  _generateMarkupIngredient(ing) {
-    return `
-    <li class="recipe__ingredient">
-      <svg class="recipe__icon">
-        <use href="${_urlImgIconsSvgDefault.default}#icon-check"></use>
-      </svg>
-      <div class="recipe__quantity">${ing.quantity ? new _fractional.Fraction(ing.quantity).toString() : ''}</div>
-      <div class="recipe__description">
-        <span class="recipe__unit">${ing.unit}</span>
-        ${ing.description}
-      </div>
-    </li>
-  `;
+    <figure class="recipe__fig">
+    <img src="${this._data.image}" alt="${this._data.name}" class="recipe__img">
+    <h1 class="recipe__title">
+        <span>${this._data.name}</span>
+    </h1>
+</figure>
+<div class="recipe__details">
+  <div class="recipe__ingredients">            
+  <button class="recipe__love svg recipe_loved svg">
+  <svg class="header__likes">
+      <use href="img/book-mark.svg#book-mark"></use>
+  </svg>
+</button>
+    <ul class="recipe__ingredient-list">
+    <li>Name: ${this._data.name}</li>
+    <li>Diameter: ${this._data.diameter} miles</li>
+    <li>Hazardous: ${this._data.hazardous}</li>
+    </ul>
+  </div>
+  <div class="recipe__ingredients">
+     <h4>Close Approach Data:</h4><br>
+  </div>
+</div>
+  </button>
+</div>`;
   }
 }
-exports.default = new recipeView();
+exports.default = new asteroidView();
 
 },{"./View.js":"48jhP","url:../../img/icons.svg":"3t5dV","fractional":"5jzJt","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"5jzJt":[function(require,module,exports) {
 /*

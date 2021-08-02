@@ -1,6 +1,6 @@
 import * as model from './model.js';
 import { MODAL_CLOSE_SEC } from './config.js';
-import recipeView from './views/recipeView.js';
+import asteroidView from './views/asteroidView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
@@ -15,7 +15,7 @@ const controlAsteroid = async function () {
     const id = window.location.hash.slice(1);
 
     if (!id) return;
-    recipeView.renderSpinner();
+    asteroidView.renderSpinner();
 
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
@@ -23,13 +23,14 @@ const controlAsteroid = async function () {
     // 1) Updating bookmarks view
     bookmarksView.update(model.state.bookmarks);
 
-    // 2) Loading recipe
+    // 2) Loading Asteroid
     await model.loadAsteroid(id);
+    console.log(model.loadAsteroid(id));
 
-    // 3) Rendering recipe
+    // 3) Rendering Asteroid
     asteroidView.render(model.state.asteroid);
   } catch (err) {
-    recipeView.renderError();
+    asteroidView.renderError();
     console.error(err);
   }
 };
@@ -70,7 +71,7 @@ const controlAddBookmark = function () {
   else model.deleteBookmark(model.state.recipe.id);
 
   // 2) Update recipe view
-  recipeView.update(model.state.recipe);
+  asteroidView.update(model.state.recipe);
 
   // 3) Render bookmarks
   bookmarksView.render(model.state.bookmarks);
@@ -83,8 +84,8 @@ const controlBookmarks = function () {
 
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
-  recipeView.addHandlerRender(controlAsteroid);
-  recipeView.addHandlerAddBookmark(controlAddBookmark);
+  asteroidView.addHandlerRender(controlAsteroid);
+  asteroidView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
 };

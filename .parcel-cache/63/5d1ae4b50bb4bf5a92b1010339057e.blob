@@ -1,0 +1,58 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+var _ViewJs = require('./View.js');
+var _ViewJsDefault = _parcelHelpers.interopDefault(_ViewJs);
+require('url:../../img/icons.svg');
+require('fractional');
+class asteroidView extends _ViewJsDefault.default {
+  _parentElement = document.querySelector('.recipe');
+  _errorMessage = 'We could not find that recipe. Please try another one!';
+  _message = '';
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+      const {updateTo} = btn.dataset;
+      if (+updateTo > 0) handler(+updateTo);
+    });
+  }
+  addHandlerAddBookmark(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
+    });
+  }
+  _generateMarkup() {
+    return `
+    <figure class="recipe__fig">
+    <img src="img/vesta_0715.jpg" alt="${this_data.name}" class="recipe__img">
+    <h1 class="recipe__title">
+        <span>${this_data.name}</span>
+    </h1>
+</figure>
+<div class="recipe__details">
+  <div class="recipe__ingredients">            
+  <button class="recipe__love svg recipe_loved svg">
+  <svg class="header__likes">
+      <use href="img/book-mark.svg#book-mark"></use>
+  </svg>
+</button>
+    <ul class="recipe__ingredient-list">
+    <li>Name: ${this_data.name}</li>
+    <li>Diameter: ${this_data.diameter} miles</li>
+    <li>Hazardous: ${this_data.hazardous}</li>
+    </ul>
+  </div>
+  <div class="recipe__ingredients">
+     <h4>Close Approach Data:</h4><br>
+  </div>
+</div>
+  </button>
+</div>`;
+  }
+}
+exports.default = new asteroidView();
